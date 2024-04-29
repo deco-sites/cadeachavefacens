@@ -3660,5 +3660,20 @@
   },
   "weather": {
     "__resolveType": "decohub/apps/weather.ts"
+  },
+  "Preview site/sections/Cadastro/CadastroSala.tsx": {
+    "__resolveType": "site/sections/Cadastro/CadastroSala.tsx",
+    "title": "Cadastro Sala",
+    "input": "Sala"
+  },
+  "pages-Cadastro%20Sala-537626": {
+    "name": "Cadastro Sala",
+    "path": "/cadastro-sala",
+    "sections": [
+      {
+        "__resolveType": "Preview site/sections/Cadastro/CadastroSala.tsx"
+      }
+    ],
+    "__resolveType": "website/pages/Page.tsx"
   }
 }
