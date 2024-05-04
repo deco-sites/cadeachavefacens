@@ -1,113 +1,48 @@
-import { AppContext } from "../../apps/site.ts";
-import type { Props as SearchbarProps } from "../../components/search/Searchbar.tsx";
-import Drawers from "../../islands/Header/Drawers.tsx";
-import { usePlatform } from "../../sdk/usePlatform.tsx";
-import type { ImageWidget } from "apps/admin/widgets.ts";
-import type { SiteNavigationElement } from "apps/commerce/types.ts";
-import type { SectionProps } from "deco/types.ts";
-import Alert from "./Alert.tsx";
-import Navbar from "./Navbar.tsx";
-import { headerHeight } from "./constants.ts";
+import { ImageWidget } from "apps/admin/widgets.ts";
+import Image from "apps/website/components/Image.tsx";
 
-export interface Logo {
-  src: ImageWidget;
-  alt: string;
-  width?: number;
-  height?: number;
-}
-export interface Buttons {
-  hideSearchButton?: boolean;
-  hideAccountButton?: boolean;
-  hideWishlistButton?: boolean;
-  hideCartButton?: boolean;
+interface Button {
+  label: string;
+  href: string;
+  /**
+   * @format color
+   */
+  color: string;
 }
 
 export interface Props {
-  alerts?: string[];
-
-  /** @title Search Bar */
-  searchbar?: Omit<SearchbarProps, "platform">;
-
-  /**
-   * @title Navigation items
-   * @description Navigation items used both on mobile and desktop menus
-   */
-  navItems?: SiteNavigationElement[] | null;
-
-  /** @title Logo */
-  logo?: Logo;
-
-  logoPosition?: "left" | "center";
-
-  buttons?: Buttons;
+  logo: {
+    alt: string;
+    src: ImageWidget;
+  };
+  buttons: Button[];
 }
 
-function Header({
-  alerts,
-  searchbar,
-  navItems = [
-    {
-      "@type": "SiteNavigationElement",
-      name: "Feminino",
-      url: "/",
-    },
-    {
-      "@type": "SiteNavigationElement",
-      name: "Masculino",
-      url: "/",
-    },
-    {
-      "@type": "SiteNavigationElement",
-      name: "Sale",
-      url: "/",
-    },
-    {
-      "@type": "SiteNavigationElement",
-      name: "Linktree",
-      url: "/",
-    },
-  ],
-  logo = {
-    src:
-      "https://ozksgdmyrqcxcwhnbepg.supabase.co/storage/v1/object/public/assets/2291/986b61d4-3847-4867-93c8-b550cb459cc7",
-    width: 100,
-    height: 16,
-    alt: "Logo",
-  },
-  logoPosition = "center",
-  buttons,
-  device,
-}: SectionProps<typeof loader>) {
-  const platform = usePlatform();
-  const items = navItems ?? [];
-
+export default function Header(props: Props) {
   return (
-    <>
-      <header style={{ height: headerHeight }}>
-        <Drawers
-          menu={{ items }}
-          searchbar={searchbar}
-          platform={platform}
-        >
-          <div class="bg-base-100 fixed w-full z-50">
-            {alerts && alerts.length > 0 && <Alert alerts={alerts} />}
-            <Navbar
-              device={device}
-              items={items}
-              searchbar={searchbar && { ...searchbar, platform }}
-              logo={logo}
-              logoPosition={logoPosition}
-              buttons={buttons}
-            />
-          </div>
-        </Drawers>
-      </header>
-    </>
+    <header class={"w-full h-20 flex flex-row justify-between bg-[#1F70B8]"}>
+      <div class="w-auto h-full flex justify-center items-center">
+        <Image
+          width={300}
+          height={60}
+          fetchPriority="high"
+          loading="eager"
+          preload={true}
+          src={props.logo.src}
+          alt={props.logo.alt}
+        />
+      </div>
+      <nav>
+        <ul class="flex flex-row gap-3 justify-center items-center">
+          {props.buttons.map((button) => (
+            <li style={{ background: button.color }} class="px-3 py-2">
+              <a href={button.href} class="text-blac uppercase">
+                {button.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </header>
   );
 }
-
-export const loader = (props: Props, _req: Request, ctx: AppContext) => {
-  return { ...props, device: ctx.device };
-};
-
-export default Header;
