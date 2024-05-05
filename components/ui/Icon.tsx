@@ -51,7 +51,8 @@ export type AvailableIcons =
   | "Search"
   | "Edit"
   | "Ban"
-  | "Check";
+  | "Check"
+  | "PlusOctagon";
 
 interface Props extends JSX.SVGAttributes<SVGSVGElement> {
   /**
