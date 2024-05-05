@@ -9,7 +9,7 @@ import * as $$$3 from "./loaders/icons.ts";
 import * as $$$0 from "./loaders/Layouts/ProductCard.tsx";
 import * as $$$1 from "./loaders/List/Sections.tsx";
 import * as $$$$$$0 from "./sections/Animation/Animation.tsx";
-import * as $$$$$$1 from "./sections/Cadastro/CadastroProfessor.tsx";
+import * as $$$$$$1 from "./sections/Cadastro/CadastroProfessores.tsx";
 import * as $$$$$$2 from "./sections/Cadastro/CadastroSala.tsx";
 import * as $$$$$$3 from "./sections/Cadastro/Flag.tsx";
 import * as $$$$$$4 from "./sections/Cards/IconCardsCarousel.tsx";
@@ -70,7 +70,7 @@ const manifest = {
   },
   "sections": {
     "site/sections/Animation/Animation.tsx": $$$$$$0,
-    "site/sections/Cadastro/CadastroProfessor.tsx": $$$$$$1,
+    "site/sections/Cadastro/CadastroProfessores.tsx": $$$$$$1,
     "site/sections/Cadastro/CadastroSala.tsx": $$$$$$2,
     "site/sections/Cadastro/Flag.tsx": $$$$$$3,
     "site/sections/Cards/IconCardsCarousel.tsx": $$$$$$4,

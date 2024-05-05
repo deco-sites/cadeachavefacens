@@ -11,17 +11,17 @@ export interface Props {
   inputClass: string;
 }
 
-export default function CadastroProfessor(props: Props) {
+export default function CadastroProfessores(props: Props) {
   return (
-    <div class="w-full h-full flex justify-center pt-24 ">
-      <div class="rounded-2xl border shadow-xl p-2 gap-4 flex flex-col lg:min-w-[440px]">
-        <h1 class="uppercase text-4xl text-center">{props.title}</h1>
+    <div class="w-full h-full flex justify-center pt-6">
+      <div class="rounded-2xl border shadow-xl p-2 gap-2 flex flex-col lg:min-w-[440px]">
+        <h1 class="uppercase text-4xl text-center mb-3">{props.title}</h1>
         <span class="text-sm">
           {props.inputName}
         </span>
         <input
           type={"text"}
-          class="outline-none bg-[#EAEAEA] h-10 w-full rounded-l-lg px-2"
+          class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
         >
         </input>
         <span class="text-sm">
@@ -29,7 +29,7 @@ export default function CadastroProfessor(props: Props) {
         </span>
         <input
           type={"text"}
-          class="outline-none bg-[#EAEAEA] h-10 w-full rounded-l-lg px-2"
+          class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
         >
         </input>
         <span class="text-sm">
@@ -37,7 +37,7 @@ export default function CadastroProfessor(props: Props) {
         </span>
         <input
           type={"text"}
-          class="outline-none bg-[#EAEAEA] h-10 w-full rounded-l-lg px-2"
+          class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
         >
         </input>
         <span class="text-sm">
@@ -45,7 +45,7 @@ export default function CadastroProfessor(props: Props) {
         </span>
         <input
           type={"text"}
-          class="outline-none bg-[#EAEAEA] h-10 w-full rounded-l-lg px-2"
+          class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
         >
         </input>
         <span class="text-sm">
