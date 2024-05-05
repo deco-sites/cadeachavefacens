@@ -1,1 +1,1 @@
-{"name":"Historico","path":"/historico","sections":[{"__resolveType":"Header - 01"}],"__resolveType":"website/pages/Page.tsx"}
+{"name":"Historico","path":"/historico","sections":[{"__resolveType":"Header - 01"},{"__resolveType":"site/sections/Historico/FiltroHistorico.tsx"}],"__resolveType":"website/pages/Page.tsx"}
