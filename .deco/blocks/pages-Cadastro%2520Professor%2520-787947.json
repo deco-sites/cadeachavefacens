@@ -1,0 +1,1 @@
+{"name":"Cadastro Professor ","path":"/cadastro-professores","sections":[{"__resolveType":"Header - 01"},{"__resolveType":"site/sections/Cadastro/CadastroProfessores.tsx","title":"CADASTRO PROFESSOR","inputName":"Nome","inputCPF":"CPF","inputPassword":"Senha","inputConfirmePassword":"Confirme a senha ","inputClass":"Salas"}],"__resolveType":"website/pages/Page.tsx"}
