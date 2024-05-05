@@ -1,1 +1,1 @@
-{"name":"Historico Professores","path":"/historico-professores","sections":[{"__resolveType":"Header - 01"}],"__resolveType":"website/pages/Page.tsx"}
+{"name":"Historico Professores","path":"/historico-professores","sections":[{"__resolveType":"Header - 01"},{"__resolveType":"site/sections/Historico/FiltroHistoricoProfessores.tsx"}],"__resolveType":"website/pages/Page.tsx"}
