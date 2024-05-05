@@ -1,10 +1,10 @@
 import Icon from "../ui/Icon.tsx";
-import CardHistorico from "./CardHistorico.tsx";
+import CardSala from "./CardSala.tsx";
 
 export default function FormFiltroSala() {
   return (
     <div class="flex w-full h-full justify-center items-center pt-6">
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-2 gap-4 max-w-[1200px] w-full">
         <div class="flex flex-col gap-2 col-span-1">
           <h2 class="text-3xl font-semibold">Filtro de Salas:</h2>
           <div class="flex flex-col p-2 shadow-lg gap-2 rounded-lg">
@@ -39,7 +39,7 @@ export default function FormFiltroSala() {
               <Icon id="Plus" size={24} class="rotate-45" />
             </button>
           </div>
-          <button class="flex justify-center items-center px-3 py-3 text-white bg-[#185C37] rounded-lg w-full text-xl gap-2">
+          <button class="flex justify-center items-center px-3 py-3 text-white bg-[#66F5A7] rounded-lg w-full text-xl gap-2">
             Cadastrar Sala
             <Icon id="Door" size={24} />
           </button>
@@ -48,9 +48,9 @@ export default function FormFiltroSala() {
           </button>
         </div>
         <div class="flex flex-col gap-2 col-span-2 col-start-2 ">
-          <CardHistorico />
-          <CardHistorico />
-          <CardHistorico />
+          <CardSala />
+          <CardSala />
+          <CardSala />
         </div>
       </div>
     </div>
