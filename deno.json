@@ -1,5 +1,6 @@
 {
   "imports": {
+    "deco-sites/cadeachavefacens/": "./",
     "deco/": "https://cdn.jsdelivr.net/gh/deco-cx/deco@1.63.4/",
     "apps/": "https://cdn.jsdelivr.net/gh/deco-cx/apps@0.38.0/",
     "$fresh/": "https://deno.land/x/fresh@1.6.8/",

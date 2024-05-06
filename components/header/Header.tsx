@@ -1,5 +1,7 @@
 import { ImageWidget } from "apps/admin/widgets.ts";
 import Image from "apps/website/components/Image.tsx";
+import { SectionProps } from "deco/types.ts";
+import { getCookies } from "std/http/cookie.ts";
 
 export interface Props {
   logo: {
@@ -8,7 +10,7 @@ export interface Props {
   };
 }
 
-export default function Header(props: Props) {
+export default function Header(props: SectionProps<ReturnType<typeof loader>>) {
   return (
     <header
       class={"w-full h-20 flex flex-row justify-between bg-[#1F70B8] px-14"}
@@ -45,4 +47,12 @@ export default function Header(props: Props) {
       </nav>
     </header>
   );
+}
+
+export function loader(props: Props, req: Request) {
+  const cookies = getCookies(req.headers);
+
+  console.log("Cookies", cookies);
+
+  return { ...props };
 }

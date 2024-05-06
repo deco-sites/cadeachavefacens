@@ -15,6 +15,8 @@ export default function ButtonCustom(
     <button
       class=" h-10 w-full text-white flex justify-center items-center rounded-lg text-xl "
       style={{ background: background }}
+      type={"button"}
+      onClick={action}
     >
       {label}
     </button>
