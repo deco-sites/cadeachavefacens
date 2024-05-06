@@ -19,7 +19,12 @@ export default function () {
         password: passworValue,
       });
 
-      token.value = res;
+      if (res.message.includes("returned null")) {
+        console.log("not user")
+      } else {
+        console.log("token", res.message)
+        token.value = res;
+      }
     }
   }
 
