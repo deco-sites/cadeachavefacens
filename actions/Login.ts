@@ -19,7 +19,7 @@ const login = async ({ user, password }: Props) => {
     body: JSON.stringify(obj),
   }).then((r) => r.json());
 
-  return response
+  return response;
 };
 
 export default login;
