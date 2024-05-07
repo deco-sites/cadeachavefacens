@@ -39,6 +39,7 @@ export default function () {
         if (res.message) {
           alert("Usuario ou senha incorretos");
         } else {
+          console.log("token", res);
           token.value = res;
         }
       }

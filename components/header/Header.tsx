@@ -1,8 +1,12 @@
 import { ImageWidget } from "apps/admin/widgets.ts";
 import Image from "apps/website/components/Image.tsx";
 import { SectionProps } from "deco/types.ts";
-import { getCookies } from "std/http/cookie.ts";
-
+import {
+  Cookie,
+  deleteCookie,
+  getCookies,
+  setCookie,
+} from "std/http/cookie.ts";
 export interface Props {
   logo: {
     alt: string;
@@ -50,8 +54,20 @@ export default function Header(props: SectionProps<ReturnType<typeof loader>>) {
 }
 
 export function loader(props: Props, req: Request) {
-  const cookies = getCookies(req.headers);
+  const headers = new Headers();
+  const cookie: Cookie = {
+    name: "language",
+    value: "en",
+    path: "/",
+    maxAge: 3600,
+    secure: true,
+    httpOnly: true,
+    sameSite: "Lax",
+  };
 
+  setCookie(headers, cookie);
+
+  const cookies = getCookies(req.headers);
   console.log("Cookies", cookies);
 
   return { ...props };

@@ -5,10 +5,11 @@
 import * as $$$$$$$$$0 from "./actions/Login.ts";
 import * as $$$$$$$$$$$0 from "./apps/decohub.ts";
 import * as $$$$$$$$$$$1 from "./apps/site.ts";
-import * as $$$2 from "./loaders/availableIcons.ts";
-import * as $$$3 from "./loaders/icons.ts";
-import * as $$$0 from "./loaders/Layouts/ProductCard.tsx";
-import * as $$$1 from "./loaders/List/Sections.tsx";
+import * as $$$3 from "./loaders/availableIcons.ts";
+import * as $$$0 from "./loaders/Historic/ClassHistoric.ts";
+import * as $$$4 from "./loaders/icons.ts";
+import * as $$$1 from "./loaders/Layouts/ProductCard.tsx";
+import * as $$$2 from "./loaders/List/Sections.tsx";
 import * as $$$$$$0 from "./sections/Animation/Animation.tsx";
 import * as $$$$$$1 from "./sections/Cadastro/CadastroProfessor.tsx";
 import * as $$$$$$2 from "./sections/Cadastro/CadastroProfessores.tsx";
@@ -69,10 +70,11 @@ import * as $$$$$$56 from "./sections/Theme/Theme.tsx";
 
 const manifest = {
   "loaders": {
-    "site/loaders/availableIcons.ts": $$$2,
-    "site/loaders/icons.ts": $$$3,
-    "site/loaders/Layouts/ProductCard.tsx": $$$0,
-    "site/loaders/List/Sections.tsx": $$$1,
+    "site/loaders/availableIcons.ts": $$$3,
+    "site/loaders/Historic/ClassHistoric.ts": $$$0,
+    "site/loaders/icons.ts": $$$4,
+    "site/loaders/Layouts/ProductCard.tsx": $$$1,
+    "site/loaders/List/Sections.tsx": $$$2,
   },
   "sections": {
     "site/sections/Animation/Animation.tsx": $$$$$$0,
