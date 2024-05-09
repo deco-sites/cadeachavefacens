@@ -4,12 +4,14 @@
  */
 
 import { signal } from "@preact/signals";
+import { Historico } from "deco-sites/cadeachavefacens/loaders/Historic/ClassHistoric.ts";
 
 const displayCart = signal(false);
 const displayMenu = signal(false);
 const displaySearchPopup = signal(false);
 const displaySearchDrawer = signal(false);
 const token = signal("");
+const historico = signal<Historico[] | null>(null);
 
 const state = {
   displayCart,
@@ -17,6 +19,7 @@ const state = {
   displaySearchPopup,
   displaySearchDrawer,
   token,
+  historico,
 };
 
 // Keyboard event listeners

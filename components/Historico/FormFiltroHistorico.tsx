@@ -4,6 +4,7 @@ import Icon from "../ui/Icon.tsx";
 import CardHistorico from "./CardHistorico.tsx";
 import { invoke } from "deco-sites/cadeachavefacens/runtime.ts";
 import { SectionProps } from "deco/types.ts";
+import ResultHistorico from "deco-sites/cadeachavefacens/islands/Historico/ResultHistorico.tsx";
 
 export default function FormFiltroHistorico() {
   return (
@@ -80,11 +81,7 @@ export default function FormFiltroHistorico() {
           </button>
         </div>
         <div class="flex flex-col gap-2 col-span-2 col-start-2 ">
-          {
-            /* {props.response.map((item) =>
-            <CardHistorico sala={item.sala} professor={item.professor} horario={item.horario} aberto={item.aberto} />
-          )} */
-          }
+          <ResultHistorico />
         </div>
       </div>
     </div>

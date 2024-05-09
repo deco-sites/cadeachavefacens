@@ -8,6 +8,8 @@ interface Props {
 export default function CardHistorico(
   { sala, professor, horario, aberto }: Props,
 ) {
+  const data = new Date(horario);
+
   return (
     <div class="rounded-lg shadow-lg w-full h-auto flex flex-col justify-start items-center p-3">
       <div class="flex flex-row gap-2 w-full">
@@ -19,14 +21,12 @@ export default function CardHistorico(
         <span class="text-xl font-semibold">{professor}</span>
       </div>
       <div class="flex flex-row gap-2 w-full">
-        <div class="w-2/4 flex flex-row gap-1">
-          <span class=" text-base font-semibold">Abertura:</span>
-          <span class="text-base  font-semibold">{horario}</span>
-        </div>
-        <div class="w-2/4 flex flex-row gap-1">
-          <span class=" text-base font-semibold">Fechamento:</span>
-          <span class="text-base  font-semibold">19:00 - 26/03/23</span>
-        </div>
+        <span class=" text-base font-semibold">
+          Horiario {aberto ? "Abertura:" : "Fechamento:"}
+        </span>
+        <span class="text-base  font-semibold">
+          {data.toLocaleString("pt-BR")}
+        </span>
       </div>
     </div>
   );

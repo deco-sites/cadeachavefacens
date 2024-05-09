@@ -41,6 +41,8 @@ export default function () {
         } else {
           console.log("token", res);
           token.value = res;
+          document.cookie = res.token;
+          window.location.pathname = "/historico";
         }
       }
     }
