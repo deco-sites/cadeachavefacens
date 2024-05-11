@@ -24,6 +24,8 @@ const loader = async (props: Props): Promise<Historico[] | null> => {
     return null;
   }
 
+  console.log("response", response);
+
   const arrayHistoric: Historico[] = [];
 
   // deno-lint-ignore no-explicit-any
