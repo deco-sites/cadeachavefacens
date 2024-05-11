@@ -25,6 +25,8 @@ export default function FormHistorico() {
   const selectDivCPF = useSignal(false);
   const initialDate = useRef<HTMLInputElement>(null);
   const finalDate = useRef<HTMLInputElement>(null);
+  const inputAbriu = useRef<HTMLInputElement>(null);
+  const inputFechado = useRef<HTMLInputElement>(null);
   const abriu = useSignal<boolean | undefined>(undefined);
   const { historico } = useUI();
 
@@ -160,6 +162,21 @@ export default function FormHistorico() {
     }
   }
 
+  async function ClearFilter() {
+    valueProfessor.value.nome = "";
+    valueSala.value.nome = "";
+    abriu.value = undefined;
+    inputAbriu.current!.checked = false;
+    inputFechado.current!.checked = false;
+
+    const cookies = document.cookie;
+    const res = await invoke.site.loaders.Historic.ClassHistoric({
+      token: cookies,
+    });
+
+    historico.value = res;
+  }
+
   return (
     <form class="flex flex-col gap-2 col-span-1">
       <div class="flex flex-row p-2 shadow-lg gap-2 rounded-lg">
@@ -253,6 +270,7 @@ export default function FormHistorico() {
               name="status"
               value="Aberto"
               class="hidden peer"
+              ref={inputAbriu}
               onClick={() => {
                 abriu.value = true;
               }}
@@ -272,6 +290,7 @@ export default function FormHistorico() {
               name="status"
               value="Fechado"
               class="hidden peer"
+              ref={inputFechado}
               onClick={() => {
                 abriu.value = false;
               }}

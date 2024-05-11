@@ -15,7 +15,7 @@ export default function FormFiltroHistorico() {
           <h2 class="text-3xl font-semibold">Filtros de Historico:</h2>
           <FormHistorico />
         </div>
-        <div class="flex flex-col gap-2 col-span-2 col-start-2 ">
+        <div class="flex flex-col gap-2 col-span-2 col-start-2 max-h-[80vh] overflow-y-auto">
           <ResultHistorico />
         </div>
       </div>
