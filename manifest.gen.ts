@@ -5,8 +5,10 @@
 import * as $$$$$$$$$0 from "./actions/Historico.ts";
 import * as $$$$$$$$$1 from "./actions/Login.ts";
 import * as $$$$$$$$$2 from "./actions/Professor/getCpfOrName.ts";
-import * as $$$$$$$$$3 from "./actions/Professor/getListSala.ts";
-import * as $$$$$$$$$4 from "./actions/Salas/getListSalas.ts";
+import * as $$$$$$$$$3 from "./actions/Professor/getListAllProfessores,.ts";
+import * as $$$$$$$$$4 from "./actions/Professor/getListProfessores.ts";
+import * as $$$$$$$$$5 from "./actions/Professor/getListSala.ts";
+import * as $$$$$$$$$6 from "./actions/Salas/getListSalas.ts";
 import * as $$$$$$$$$$$0 from "./apps/decohub.ts";
 import * as $$$$$$$$$$$1 from "./apps/site.ts";
 import * as $$$3 from "./loaders/availableIcons.ts";
@@ -143,8 +145,10 @@ const manifest = {
     "site/actions/Historico.ts": $$$$$$$$$0,
     "site/actions/Login.ts": $$$$$$$$$1,
     "site/actions/Professor/getCpfOrName.ts": $$$$$$$$$2,
-    "site/actions/Professor/getListSala.ts": $$$$$$$$$3,
-    "site/actions/Salas/getListSalas.ts": $$$$$$$$$4,
+    "site/actions/Professor/getListAllProfessores,.ts": $$$$$$$$$3,
+    "site/actions/Professor/getListProfessores.ts": $$$$$$$$$4,
+    "site/actions/Professor/getListSala.ts": $$$$$$$$$5,
+    "site/actions/Salas/getListSalas.ts": $$$$$$$$$6,
   },
   "apps": {
     "site/apps/decohub.ts": $$$$$$$$$$$0,

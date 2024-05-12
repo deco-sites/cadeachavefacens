@@ -6,6 +6,7 @@
 import { signal } from "@preact/signals";
 import { Historico } from "deco-sites/cadeachavefacens/loaders/Historic/ClassHistoric.ts";
 import { Sala } from "deco-sites/cadeachavefacens/actions/Salas/getListSalas.ts";
+import { Professor } from "deco-sites/cadeachavefacens/actions/Professor/getListProfessores.ts";
 
 const displayCart = signal(false);
 const displayMenu = signal(false);
@@ -14,6 +15,7 @@ const displaySearchDrawer = signal(false);
 const token = signal("");
 const historico = signal<Historico[] | null>(null);
 const salas = signal<Sala[] | null>(null);
+const professores = signal<Professor[] | null>(null);
 
 const state = {
   displayCart,
@@ -23,6 +25,7 @@ const state = {
   token,
   historico,
   salas,
+  professores,
 };
 
 // Keyboard event listeners
