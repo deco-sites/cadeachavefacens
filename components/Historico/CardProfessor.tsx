@@ -25,7 +25,7 @@ export default function CardProfesor({ nomeProfessor, cpf, salas }: Props) {
         <span class="text-lg font-semibold">{cpf}</span>
       </div>
       <div class="flex flex-row gap-2 w-full">
-        {salas.map((salas) => <FlagSala label={salas.nome} />)}
+        {salas.map((salas) => <FlagSala label={salas.nome} icon={false} />)}
       </div>
       <div class="flex flex-row gap-2 w-full">
         <button class=" font-semibold px-1 py-1 rounded-lg bg-[#66F5A7] text-white">

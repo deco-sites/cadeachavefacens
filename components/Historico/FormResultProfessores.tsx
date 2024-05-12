@@ -74,6 +74,19 @@ export default function FormResultProfessores() {
     selectDivName.value = false;
   }
 
+  async function ClearFilter() {
+    valueProfessor.value.nome = "";
+
+    const cookies = document.cookie;
+    const res = await invoke.site.actions.Professor["getListAllProfessores,"]({
+      token: cookies,
+    });
+
+    console.log("clear");
+
+    professores.value = res;
+  }
+
   return (
     <div class="flex flex-col gap-2 col-span-1">
       <div class="flex flex-col p-2 shadow-lg gap-2 rounded-lg relative">
@@ -109,7 +122,10 @@ export default function FormResultProfessores() {
         >
           Aplicar Filtros <Icon id="Search" size={24} />
         </button>
-        <button class="flex justify-center items-center px-3 py-3 text-white bg-[#FFA800] rounded-lg w-2/4 text-xl gap-2">
+        <button
+          class="flex justify-center items-center px-3 py-3 text-white bg-[#FFA800] rounded-lg w-2/4 text-xl gap-2"
+          onClick={ClearFilter}
+        >
           Limpar
           <Icon id="Plus" size={24} class="rotate-45" />
         </button>
