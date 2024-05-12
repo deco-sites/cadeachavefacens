@@ -1,15 +1,16 @@
-import Icon from "../ui/Icon.tsx";
+import Icon from "../../components/ui/Icon.tsx";
 
-export interface Flag {
+export interface Props {
   label: string;
-  id: string;
+  icon?: boolean;
+  id?: number;
 }
 
-export default function Flag({ label, id }: Flag) {
+export default function FlagSala({ label, icon = true }: Props) {
   return (
-    <div>
+    <div class="flex flex-row gap-2 bg-[#69B1F2] rounded-lg text-white font-semibold px-3 py-2">
       <span>{label}</span>
-      <Icon id="ChevronDown" size={24} />
+      {icon && <Icon id="Plus" size={24} class="rotate-45 -mr-2" />}
     </div>
   );
 }
