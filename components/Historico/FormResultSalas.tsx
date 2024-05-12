@@ -167,10 +167,13 @@ export default function FormResultSalas() {
           <Icon id="Plus" size={24} class="rotate-45" />
         </button>
       </div>
-      <button class="flex justify-center items-center px-3 py-3 text-white bg-[#66F5A7] rounded-lg w-full text-xl gap-2">
+      <a
+        href="/cadastro-sala"
+        class="flex justify-center items-center px-3 py-3 text-white bg-[#66F5A7] rounded-lg w-full text-xl gap-2"
+      >
         Cadastrar Sala
         <Icon id="Door" size={24} />
-      </button>
+      </a>
       <button class="flex justify-center items-center px-3 py-3 text-white bg-[#185C37] rounded-lg w-full text-xl">
         Gerar Excel
       </button>
