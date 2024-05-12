@@ -33,18 +33,12 @@ export default function Header(props: SectionProps<ReturnType<typeof loader>>) {
       <nav class="flex justify-center items-center h-full">
         <ul class="flex flex-row gap-3 justify-center items-center">
           <li style={{ background: "#EDC61C" }} class="px-3 py-2 rounded-lg">
-            <a
-              href={"/historico-salas"}
-              class="text-black uppercase font-semibold"
-            >
+            <a href={"/salas"} class="text-black uppercase font-semibold">
               Salas
             </a>
           </li>
           <li style={{ background: "#1CBBED" }} class="px-3 py-2 rounded-lg">
-            <a
-              href={"/historico-professores"}
-              class="text-black uppercase font-semibold"
-            >
+            <a href={"/professores"} class="text-black uppercase font-semibold">
               Professores
             </a>
           </li>
