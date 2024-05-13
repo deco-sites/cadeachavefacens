@@ -3,6 +3,8 @@ import { useRef } from "preact/compat";
 import { signal, useSignal, useSignalEffect } from "@preact/signals";
 import ButtonCustom from "deco-sites/cadeachavefacens/components/Cadastro/ButtonCustom.tsx";
 import Icon from "deco-sites/cadeachavefacens/components/ui/Icon.tsx";
+import { invoke } from "deco-sites/cadeachavefacens/runtime.ts";
+import CookieConsent from "deco-sites/cadeachavefacens/components/ui/CookieConsent.tsx";
 
 export interface Props {
   title: string;
@@ -45,6 +47,19 @@ export default function CadastroSala(props: Props) {
     arraySalas.value = arraySala.value;
   }
 
+  function postArraySala() {
+    const cookies = document.cookie;
+
+    arraySalas.value.map(async (sala: string) => {
+      const res = await invoke.site.actions.Salas.postSala({
+        token: cookies,
+        nome: sala,
+      });
+
+      console.log("sala", res);
+    });
+  }
+
   return (
     <div class="w-full h-full flex justify-center ">
       <div class="rounded-2xl border shadow-xl p-2 gap-4 flex flex-col lg:min-w-[440px]">
@@ -80,6 +95,7 @@ export default function CadastroSala(props: Props) {
           label="Salvar e Voltar"
           background="#FFA800"
           colorText="white"
+          action={() => postArraySala()}
         />
       </div>
     </div>

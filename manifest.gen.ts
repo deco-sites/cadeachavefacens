@@ -10,6 +10,7 @@ import * as $$$$$$$$$4 from "./actions/Professor/getListProfessores.ts";
 import * as $$$$$$$$$5 from "./actions/Professor/getListSala.ts";
 import * as $$$$$$$$$6 from "./actions/Professor/getProfesorId.ts";
 import * as $$$$$$$$$7 from "./actions/Salas/getListSalas.ts";
+import * as $$$$$$$$$8 from "./actions/Salas/postSala.ts";
 import * as $$$$$$$$$$$0 from "./apps/decohub.ts";
 import * as $$$$$$$$$$$1 from "./apps/site.ts";
 import * as $$$3 from "./loaders/availableIcons.ts";
@@ -151,6 +152,7 @@ const manifest = {
     "site/actions/Professor/getListSala.ts": $$$$$$$$$5,
     "site/actions/Professor/getProfesorId.ts": $$$$$$$$$6,
     "site/actions/Salas/getListSalas.ts": $$$$$$$$$7,
+    "site/actions/Salas/postSala.ts": $$$$$$$$$8,
   },
   "apps": {
     "site/apps/decohub.ts": $$$$$$$$$$$0,
