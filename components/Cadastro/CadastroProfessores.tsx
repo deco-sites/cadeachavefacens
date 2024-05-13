@@ -19,13 +19,10 @@ export interface Professor {
   salas: Sala[];
 }
 
-export interface User {
-  id: string;
-  login: string;
-  password: string;
-  role: string;
-  ativo: boolean;
-  professor: Professor;
+interface ProfessorPost {
+  nome: string;
+  cpf: string;
+  salas: number[] | null;
 }
 
 export interface Props {
@@ -37,6 +34,13 @@ export interface Props {
   inputClass: string;
 }
 
+interface User {
+  login: string;
+  password: string;
+  role: string;
+  professor_id: number;
+}
+
 export default function CadastroProfessores(props: Props) {
   const professor = useSignal<Professor | null>(null);
   const refName = useRef<HTMLInputElement | null>(null);
@@ -44,8 +48,12 @@ export default function CadastroProfessores(props: Props) {
   const refSenha = useRef<HTMLInputElement | null>(null);
   const refConfirSenha = useRef<HTMLInputElement | null>(null);
 
+  const validateName = useSignal(false);
+  const validateCPF = useSignal(false);
+  const validateSenha = useSignal(false);
+  const validateConfirmSenha = useSignal(false);
+
   const listSalas = useSignal<Sala[] | null>(null);
-  const listClass = useSignal<Sala[] | null>(null);
   const listClassPost = useSignal<Sala[] | null>(null);
 
   const valueSala = useSignal<Sala>({ nome: "" });
@@ -158,6 +166,82 @@ export default function CadastroProfessores(props: Props) {
     listClassPost.value = array;
   }
 
+  function postProfessor() {
+    const cookies = document.cookie;
+
+    // const resProfessor = invoke.site.actions.Professor.postProfessor({ token: cookies, professor:})
+  }
+
+  async function createProf() {
+    const cookies = document.cookie;
+
+    if (!refName.current?.value) {
+      validateName.value = true;
+    } else {
+      validateName.value = false;
+    }
+    if (!refCPF.current?.value) {
+      validateCPF.value = true;
+    } else {
+      validateCPF.value = false;
+    }
+    if (!refSenha.current?.value) {
+      validateSenha.value = true;
+    } else {
+      validateSenha.value = false;
+    }
+    if (refConfirSenha.current?.value != refSenha.current?.value) {
+      validateConfirmSenha.value = true;
+    } else {
+      validateConfirmSenha.value = false;
+    }
+
+    if (
+      refCPF.current?.value && refName.current?.value &&
+      refConfirSenha.current?.value
+    ) {
+      console.log("validate");
+
+      const arrayIndex: number[] | null = [];
+
+      if (listClassPost.value && listClassPost.value?.length > 0) {
+        listClassPost.value.map((index) => {
+          if (index.id) {
+            arrayIndex.push(index.id);
+          }
+        });
+      }
+
+      const professor: ProfessorPost = {
+        nome: refName.current.value,
+        cpf: refCPF.current.value,
+        salas: arrayIndex || null,
+      };
+
+      const res = await invoke.site.actions.Professor.postProfessor({
+        token: cookies,
+        professor: professor,
+      });
+
+      if (res) {
+        const user: User = {
+          login: professor.cpf,
+          password: refConfirSenha.current.value,
+          role: "USER",
+          professor_id: await res,
+        };
+        const resUser = await invoke.site.actions.User.postUsuario({
+          token: cookies,
+          user: user,
+        });
+
+        console.log("user", resUser);
+      }
+
+      console.log("res", res);
+    }
+  }
+
   return (
     <div class="w-full h-full flex justify-center pt-6">
       <div class="rounded-2xl border shadow-xl p-2 gap-2 flex flex-col lg:min-w-[440px]">
@@ -172,6 +256,11 @@ export default function CadastroProfessores(props: Props) {
           class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
         >
         </input>
+        {validateName.value && (
+          <span class="text-xs text-red-600">
+            Preencha o campo corretamente*
+          </span>
+        )}
         <span class="text-sm">
           {props.inputCPF}
         </span>
@@ -182,6 +271,11 @@ export default function CadastroProfessores(props: Props) {
           class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
         >
         </input>
+        {validateCPF.value && (
+          <span class="text-xs text-red-600">
+            Preencha o campo corretamente*
+          </span>
+        )}
         <span class="text-sm">
           {props.inputPassword}
         </span>
@@ -191,6 +285,11 @@ export default function CadastroProfessores(props: Props) {
           class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
         >
         </input>
+        {validateCPF.value && (
+          <span class="text-xs text-red-600">
+            Preencha o campo corretamente*
+          </span>
+        )}
         <span class="text-sm">
           {props.inputConfirmePassword}
         </span>
@@ -200,6 +299,9 @@ export default function CadastroProfessores(props: Props) {
           class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
         >
         </input>
+        {validateConfirmSenha.value && (
+          <span class="text-xs text-red-600">As senhas estão incorretas*</span>
+        )}
         <span class="text-sm">
           {props.inputClass}
         </span>
@@ -253,6 +355,7 @@ export default function CadastroProfessores(props: Props) {
           label="Cadastrar"
           background="#66F5A7"
           colorText="white"
+          action={() => createProf()}
         />
       </div>
     </div>
