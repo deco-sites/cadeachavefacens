@@ -55,8 +55,6 @@ export default function CadastroSala(props: Props) {
         token: cookies,
         nome: sala,
       });
-
-      console.log("sala", res);
     });
   }
 

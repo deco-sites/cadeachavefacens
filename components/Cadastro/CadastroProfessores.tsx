@@ -3,12 +3,13 @@ import Icon from "../ui/Icon.tsx";
 import { invoke } from "deco-sites/cadeachavefacens/runtime.ts";
 import FlagSala from "../Cadastro/Flag.tsx";
 import { signal, useSignal, useSignalEffect } from "@preact/signals";
+import { ChangeEvent, useRef } from "preact/compat";
 
 interface Sala {
-  id: number;
+  id?: number;
   nome: string;
-  aberta: boolean;
-  ativo: boolean;
+  aberta?: boolean;
+  ativo?: boolean;
 }
 
 export interface Professor {
@@ -38,6 +39,23 @@ export interface Props {
 
 export default function CadastroProfessores(props: Props) {
   const professor = useSignal<Professor | null>(null);
+  const refName = useRef<HTMLInputElement | null>(null);
+  const refCPF = useRef<HTMLInputElement | null>(null);
+  const refSenha = useRef<HTMLInputElement | null>(null);
+  const refConfirSenha = useRef<HTMLInputElement | null>(null);
+
+  const listSalas = useSignal<Sala[] | null>(null);
+  const listClass = useSignal<Sala[] | null>(null);
+  const listClassPost = useSignal<Sala[] | null>(null);
+
+  const valueSala = useSignal<Sala>({ nome: "" });
+  const selectDivSalas = useSignal(false);
+
+  function ExitInput() {
+    setTimeout(() => {
+      selectDivSalas.value = false;
+    }, 250);
+  }
 
   async function getProfessor() {
     const path = globalThis.window.location.pathname;
@@ -67,9 +85,78 @@ export default function CadastroProfessores(props: Props) {
     }
   }
 
-  useSignalEffect(() => {
-    getProfessor();
-  });
+  async function getListSalas() {
+    const cookies = document.cookie;
+
+    console.log("foi aq");
+
+    const res = await invoke.site.actions.Professor.getListSala({
+      token: cookies,
+      termo: valueSala.value.nome,
+    });
+    listSalas.value = res;
+
+    console.log("res", listSalas.value, res);
+  }
+
+  function addClass(sala: Sala) {
+    const array: Sala[] = [];
+
+    listClassPost.value?.map((item) => {
+      array.push({
+        id: item.id || 0,
+        nome: item.nome,
+        aberta: item.aberta || true,
+        ativo: item.ativo,
+      });
+    });
+
+    array.push(sala);
+
+    listClassPost.value = array;
+  }
+
+  function SelectOption(e: Event, value: string, id: number) {
+    e.preventDefault();
+    valueSala.value.nome = value;
+    valueSala.value.id = id;
+    selectDivSalas.value = false;
+  }
+
+  function getOptions(
+    e: ChangeEvent<HTMLInputElement>,
+  ) {
+    e.preventDefault();
+
+    selectDivSalas.value = true;
+
+    if (e.currentTarget.value !== valueSala.value.nome) {
+      valueSala.value.id = valueSala.value.nome == ""
+        ? undefined
+        : valueSala.value.id;
+      valueSala.value.nome = e.currentTarget.value;
+      setTimeout(getListSalas, 500);
+    }
+  }
+
+  function removeFlag(sala: Sala) {
+    // Encontre o índice do item que você deseja remover
+    const array = listClassPost.value || [];
+    const index = array.findIndex((r) => r.nome == sala.nome);
+
+    console.log("remove", index, array);
+
+    // Verifique se o item foi encontrado
+    if (index !== undefined) {
+      // Remova o item usando o método splice
+      array?.splice(index, 1);
+    } else {
+      console.log("Item não encontrado no array.");
+    }
+
+    listClassPost.value = [];
+    listClassPost.value = array;
+  }
 
   return (
     <div class="w-full h-full flex justify-center pt-6">
@@ -81,6 +168,7 @@ export default function CadastroProfessores(props: Props) {
         <input
           type={"text"}
           value={professor.value?.nome}
+          ref={refName}
           class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
         >
         </input>
@@ -90,6 +178,7 @@ export default function CadastroProfessores(props: Props) {
         <input
           type={"text"}
           value={professor.value?.cpf}
+          ref={refCPF}
           class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
         >
         </input>
@@ -98,6 +187,7 @@ export default function CadastroProfessores(props: Props) {
         </span>
         <input
           type={"text"}
+          ref={refSenha}
           class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
         >
         </input>
@@ -106,25 +196,57 @@ export default function CadastroProfessores(props: Props) {
         </span>
         <input
           type={"text"}
+          ref={refConfirSenha}
           class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
         >
         </input>
         <span class="text-sm">
           {props.inputClass}
         </span>
-        <div class="flex flex-row h-10 w-full rounded-lg bg-[#EAEAEA]">
+        <div class="flex flex-row h-10 w-full rounded-lg bg-[#EAEAEA] relative">
           <input
             type={"text"}
-            class="outline-none bg-[#EAEAEA] h-10 w-full rounded-l-lg px-2"
+            class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
+            value={valueSala.value.nome}
+            onKeyUp={(e) => getOptions(e)}
+            onBlur={ExitInput}
           >
           </input>
           <button class="min-w-10 bg-green-500 w-10 h-10 flex justify-center items-center rounded-lg text-white">
-            <Icon id="Plus" size={24} />
+            <Icon
+              id="Plus"
+              size={24}
+              onClick={() => addClass(valueSala.value)}
+            />
           </button>
+          {selectDivSalas.value && (
+            <div class="absolute top-full rounded-lg bg-white flex flex-col gap-2 z-10 w-full items-start max-h-28 overflow-y-scroll">
+              {listSalas.value?.map((item) => (
+                <button
+                  class="w-full h-auto px-2 py-1 hover:bg-[#1f70b8] hover:text-white text-start"
+                  type={"button"}
+                  onClick={() => addClass(item)}
+                >
+                  {item.nome}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
         <div class="flex flex-row gap-2">
           {professor.value?.salas.map((sala) => (
-            <FlagSala label={sala.nome} id={sala.id} />
+            <FlagSala
+              label={sala.nome}
+              id={sala.id}
+              action={() => removeFlag(sala)}
+            />
+          ))}
+          {listClassPost.value?.map((sala) => (
+            <FlagSala
+              label={sala.nome}
+              id={sala.id}
+              action={() => removeFlag(sala)}
+            />
           ))}
         </div>
         <ButtonCustom
