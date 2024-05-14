@@ -33,11 +33,11 @@ const loader = async (props: Props): Promise<Professor[] | null> => {
   }
 
   const arrayProfessores: Professor[] = [];
-  const arraySalas: Sala[] = [];
 
   console.log("response ", response);
 
   response.content.map((item: Professor) => {
+    const arraySalas: Sala[] = [];
     item.salas.map((sala) => {
       arraySalas.push({
         nome: sala.nome,

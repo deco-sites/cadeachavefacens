@@ -36,9 +36,10 @@ export interface Props {
 
 interface User {
   login: string;
-  password: string;
+  password?: string;
   role: string;
   professor_id: number;
+  ativo?: boolean;
 }
 
 export default function CadastroProfessores(props: Props) {
@@ -59,6 +60,8 @@ export default function CadastroProfessores(props: Props) {
   const valueSala = useSignal<Sala>({ nome: "" });
   const selectDivSalas = useSignal(false);
 
+  const isEdit = useSignal(false);
+
   function ExitInput() {
     setTimeout(() => {
       selectDivSalas.value = false;
@@ -67,10 +70,11 @@ export default function CadastroProfessores(props: Props) {
 
   async function getProfessor() {
     const path = globalThis.window.location.pathname;
-    const pathSearch = "cadastro-professor";
+    const pathSearch = "editar-professor";
     const cookies = document.cookie;
 
     if (path.includes(pathSearch)) {
+      isEdit.value = true;
       // Encontre a posição da string desejada
       const position = path.indexOf(pathSearch);
 
@@ -85,10 +89,11 @@ export default function CadastroProfessores(props: Props) {
         });
 
         professor.value = res;
+        listClassPost.value = professor.value?.salas || null;
 
-        console.log("professor", professor.value);
+        console.log("professor", professor.value?.salas, listClassPost.value);
       } else {
-        console.log("String não encontrada");
+        isEdit.value = false;
       }
     }
   }
@@ -123,14 +128,6 @@ export default function CadastroProfessores(props: Props) {
 
     listClassPost.value = array;
   }
-
-  function SelectOption(e: Event, value: string, id: number) {
-    e.preventDefault();
-    valueSala.value.nome = value;
-    valueSala.value.id = id;
-    selectDivSalas.value = false;
-  }
-
   function getOptions(
     e: ChangeEvent<HTMLInputElement>,
   ) {
@@ -164,6 +161,8 @@ export default function CadastroProfessores(props: Props) {
 
     listClassPost.value = [];
     listClassPost.value = array;
+
+    console.log("new Array", listClassPost.value, array);
   }
 
   function postProfessor() {
@@ -197,6 +196,7 @@ export default function CadastroProfessores(props: Props) {
     }
 
     if (
+      !isEdit &&
       refCPF.current?.value && refName.current?.value &&
       refConfirSenha.current?.value
     ) {
@@ -239,8 +239,53 @@ export default function CadastroProfessores(props: Props) {
       }
 
       console.log("res", res);
+    } else if (isEdit && refCPF.current?.value && refName.current?.value) {
+      const arrayIndex: number[] | null = [];
+
+      if (listClassPost.value && listClassPost.value?.length > 0) {
+        listClassPost.value.map((index) => {
+          if (index.id) {
+            arrayIndex.push(index.id);
+          }
+        });
+      }
+
+      const professorPut: ProfessorPost = {
+        nome: refName.current.value,
+        cpf: refCPF.current.value,
+        salas: arrayIndex || null,
+      };
+
+      const res = await invoke.site.actions.Professor.putProfessor({
+        token: cookies,
+        professor: professorPut,
+        id: professor.value?.id,
+      });
+
+      console.log("resPut", res);
+
+      if (res) {
+        const user: User = {
+          login: professorPut.cpf,
+          password: "admin123",
+          role: "USER",
+          professor_id: res,
+          ativo: true,
+        };
+        const resUser = await invoke.site.actions.User.putUsuario({
+          token: cookies,
+          user: user,
+          id: res,
+        });
+
+        console.log("user", resUser);
+      }
     }
   }
+
+  useSignalEffect(() => {
+    getProfessor();
+  });
 
   return (
     <div class="w-full h-full flex justify-center pt-6">
@@ -336,23 +381,32 @@ export default function CadastroProfessores(props: Props) {
           )}
         </div>
         <div class="flex flex-row gap-2">
-          {professor.value?.salas.map((sala) => (
-            <FlagSala
-              label={sala.nome}
-              id={sala.id}
-              action={() => removeFlag(sala)}
-            />
-          ))}
-          {listClassPost.value?.map((sala) => (
-            <FlagSala
-              label={sala.nome}
-              id={sala.id}
-              action={() => removeFlag(sala)}
-            />
-          ))}
+          {isEdit
+            ? (
+              <>
+                {listClassPost.value?.map((sala) => (
+                  <FlagSala
+                    label={sala.nome}
+                    id={sala.id}
+                    action={() => removeFlag(sala)}
+                  />
+                ))}
+              </>
+            )
+            : (
+              <>
+                {listClassPost.value?.map((sala) => (
+                  <FlagSala
+                    label={sala.nome}
+                    id={sala.id}
+                    action={() => removeFlag(sala)}
+                  />
+                ))}
+              </>
+            )}
         </div>
         <ButtonCustom
-          label="Cadastrar"
+          label={isEdit ? "Salvar alterações" : "Cadastrar"}
           background="#66F5A7"
           colorText="white"
           action={() => createProf()}

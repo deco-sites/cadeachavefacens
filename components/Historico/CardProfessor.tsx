@@ -11,7 +11,7 @@ interface Props {
   id: number;
   nomeProfessor: string;
   cpf: string;
-  salas: Sala[];
+  salas: Sala[] | null;
 }
 
 export default function CardProfesor({ id, nomeProfessor, cpf, salas }: Props) {
@@ -25,9 +25,11 @@ export default function CardProfesor({ id, nomeProfessor, cpf, salas }: Props) {
         <span class="text-lg font-semibold">CPF:</span>
         <span class="text-lg font-semibold">{cpf}</span>
       </div>
-      <div class="flex flex-row gap-2 w-full">
-        {salas.map((salas) => <FlagSala label={salas.nome} icon={false} />)}
-      </div>
+      {salas && (
+        <div class="flex flex-row gap-2 w-full">
+          {salas.map((salas) => <FlagSala label={salas.nome} icon={false} />)}
+        </div>
+      )}
       <div class="flex flex-row gap-2 w-full">
         <a
           href={`/editar-professor/${id}`}

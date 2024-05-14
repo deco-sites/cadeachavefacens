@@ -3,18 +3,20 @@ interface User {
   password?: string;
   role: string;
   professor_id: number;
+  ativo?: boolean;
 }
 
 interface Props {
   token: string;
   user: User;
+  id: number;
 }
 
 const loader = async (props: Props) => {
-  const url = `https://cadeachave.onrender.com/api/user`;
+  const url = `https://cadeachave.onrender.com/api/user/${props.id}`;
 
   const response = await fetch(url, {
-    method: "POST",
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
       "Authorization": "Bearer " + props.token,
@@ -22,11 +24,13 @@ const loader = async (props: Props) => {
     body: JSON.stringify(props.user),
   }).then((r) => r.json()).catch((r) => console.error("error", r));
 
+  console.log("put", response);
+
   if (!response) {
     return null;
   }
 
-  return response;
+  return response.id;
 };
 
 export default loader;
