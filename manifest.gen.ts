@@ -11,10 +11,11 @@ import * as $$$$$$$$$5 from "./actions/Professor/getListSala.ts";
 import * as $$$$$$$$$6 from "./actions/Professor/getProfesorId.ts";
 import * as $$$$$$$$$7 from "./actions/Professor/postProfessor.ts";
 import * as $$$$$$$$$8 from "./actions/Professor/putProfessor.ts";
-import * as $$$$$$$$$9 from "./actions/Salas/getListSalas.ts";
-import * as $$$$$$$$$10 from "./actions/Salas/postSala.ts";
-import * as $$$$$$$$$11 from "./actions/User/postUsuario.ts";
-import * as $$$$$$$$$12 from "./actions/User/putUsuario.ts";
+import * as $$$$$$$$$9 from "./actions/Salas/getListAllSalas.ts";
+import * as $$$$$$$$$10 from "./actions/Salas/getListSalas.ts";
+import * as $$$$$$$$$11 from "./actions/Salas/postSala.ts";
+import * as $$$$$$$$$12 from "./actions/User/postUsuario.ts";
+import * as $$$$$$$$$13 from "./actions/User/putUsuario.ts";
 import * as $$$$$$$$$$$0 from "./apps/decohub.ts";
 import * as $$$$$$$$$$$1 from "./apps/site.ts";
 import * as $$$3 from "./loaders/availableIcons.ts";
@@ -157,10 +158,11 @@ const manifest = {
     "site/actions/Professor/getProfesorId.ts": $$$$$$$$$6,
     "site/actions/Professor/postProfessor.ts": $$$$$$$$$7,
     "site/actions/Professor/putProfessor.ts": $$$$$$$$$8,
-    "site/actions/Salas/getListSalas.ts": $$$$$$$$$9,
-    "site/actions/Salas/postSala.ts": $$$$$$$$$10,
-    "site/actions/User/postUsuario.ts": $$$$$$$$$11,
-    "site/actions/User/putUsuario.ts": $$$$$$$$$12,
+    "site/actions/Salas/getListAllSalas.ts": $$$$$$$$$9,
+    "site/actions/Salas/getListSalas.ts": $$$$$$$$$10,
+    "site/actions/Salas/postSala.ts": $$$$$$$$$11,
+    "site/actions/User/postUsuario.ts": $$$$$$$$$12,
+    "site/actions/User/putUsuario.ts": $$$$$$$$$13,
   },
   "apps": {
     "site/apps/decohub.ts": $$$$$$$$$$$0,

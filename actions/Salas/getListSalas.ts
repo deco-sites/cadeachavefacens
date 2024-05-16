@@ -1,7 +1,7 @@
 export interface Sala {
   nome: string;
   id: number;
-  aberto: boolean;
+  aberta: boolean;
   ativo: boolean;
 }
 
@@ -37,7 +37,7 @@ const loader = async (props: Props): Promise<Sala[] | null> => {
     arraySala.push({
       nome: item.nome,
       id: item.id,
-      aberto: item.aberto,
+      aberta: item.aberta,
       ativo: item.ativo,
     });
   });

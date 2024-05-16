@@ -7,11 +7,10 @@ export interface Sala {
 
 export interface Props {
   token: string;
-  termo: string;
 }
 
 const loader = async (props: Props): Promise<Sala[] | null> => {
-  const url = `https://cadeachave.onrender.com/api/sala/nomeCom/${props.termo}`;
+  const url = `https://cadeachave.onrender.com/api/sala`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -21,7 +20,7 @@ const loader = async (props: Props): Promise<Sala[] | null> => {
     },
   }).then((r) => r.json()).catch((r) => console.error("error", r));
 
-  console.log("response", response);
+  console.log("responseSalas", response);
 
   if (!response) {
     return null;

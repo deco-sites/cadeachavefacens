@@ -25,6 +25,7 @@ import * as $Historico_FormResultProfessores from "./islands/Historico/FormResul
 import * as $Historico_FormResultSalas from "./islands/Historico/FormResultSalas.tsx";
 import * as $Historico_ResultHistorico from "./islands/Historico/ResultHistorico.tsx";
 import * as $Historico_ResultProfessores from "./islands/Historico/ResultProfessores.tsx";
+import * as $Historico_ResultSalas from "./islands/Historico/ResultSalas.tsx";
 import * as $Login_Form from "./islands/Login/Form.tsx";
 import * as $Newsletter from "./islands/Newsletter.tsx";
 import * as $OutOfStock from "./islands/OutOfStock.tsx";
@@ -64,6 +65,7 @@ const manifest = {
     "./islands/Historico/FormResultSalas.tsx": $Historico_FormResultSalas,
     "./islands/Historico/ResultHistorico.tsx": $Historico_ResultHistorico,
     "./islands/Historico/ResultProfessores.tsx": $Historico_ResultProfessores,
+    "./islands/Historico/ResultSalas.tsx": $Historico_ResultSalas,
     "./islands/Login/Form.tsx": $Login_Form,
     "./islands/Newsletter.tsx": $Newsletter,
     "./islands/OutOfStock.tsx": $OutOfStock,

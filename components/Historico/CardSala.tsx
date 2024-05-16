@@ -1,17 +1,32 @@
 import Icon from "../ui/Icon.tsx";
 
-export default function CardSala() {
+export interface Sala {
+  nome: string;
+  id?: number;
+  aberta: boolean;
+  ativo?: boolean;
+}
+
+export default function CardSala({ nome, aberta }: Sala) {
   return (
     <div class="rounded-lg shadow-lg w-full h-auto flex flex-col justify-start items-center p-3 gap-2">
       <div class="flex flex-row gap-2 w-full">
         <span class="text-xl font-semibold">Sala:</span>
-        <span class="text-xl font-semibold">L24</span>
+        <span class="text-xl font-semibold">{nome}</span>
       </div>
       <div class="flex flex-row gap-2 w-full">
         <span class="text-lg font-semibold">Status:</span>
-        <button class="text-black font-semibold px-2 py-1 rounded-lg bg-[#66F5A7]">
-          Aberto
-        </button>
+        {aberta
+          ? (
+            <button class="text-black font-semibold px-2 py-1 rounded-lg bg-[#66F5A7] cursor-none">
+              Aberto
+            </button>
+          )
+          : (
+            <button class="text-black font-semibold px-2 py-1 rounded-lg bg-[#FF0000] cursor-none">
+              Fechado
+            </button>
+          )}
       </div>
       <div class="flex flex-row gap-2 w-full">
         <button class=" font-semibold px-1 py-1 rounded-lg bg-[#66F5A7] text-white">
