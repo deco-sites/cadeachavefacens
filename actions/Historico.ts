@@ -41,7 +41,7 @@ const loader = async (props: Props): Promise<Historico[] | null> => {
   });
 
   const url =
-    `https://cadeachave.onrender.com/api/historico/filtro/${props.dataInicial}/${props.dataFinal} + ${stringUrl}`;
+    `https://cadeachave-1715465469308.azurewebsites.net/api/historico/filtro/${props.dataInicial}/${props.dataFinal} + ${stringUrl}`;
 
   const response = await fetch(url, {
     method: "GET",

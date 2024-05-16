@@ -36,6 +36,8 @@ export default function FormResultSalas() {
   }
 
   function SelectOption(value: string, id: number) {
+    console.log("select", value);
+
     valueSala.value.nome = value;
     valueSala.value.id = id;
     selectDivSalas.value = false;
@@ -66,6 +68,7 @@ export default function FormResultSalas() {
   async function ApplyFilter() {
     const cookies = document.cookie;
 
+    console.log("filtrar", valueSala.value.nome);
     const res = await invoke.site.actions.Salas.getListSalas({
       token: cookies,
       nome: valueSala.value.nome,

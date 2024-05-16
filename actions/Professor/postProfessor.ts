@@ -10,7 +10,8 @@ interface Props {
 }
 
 const loader = async (props: Props): Promise<number | null> => {
-  const url = `https://cadeachave.onrender.com/api/professor`;
+  const url =
+    `https://cadeachave-1715465469308.azurewebsites.net/api/professor`;
   const professor: Professor = {
     nome: props.professor.nome,
     cpf: props.professor.cpf,

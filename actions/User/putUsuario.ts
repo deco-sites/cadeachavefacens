@@ -13,7 +13,8 @@ interface Props {
 }
 
 const loader = async (props: Props) => {
-  const url = `https://cadeachave.onrender.com/api/user/${props.id}`;
+  const url =
+    `https://cadeachave-1715465469308.azurewebsites.net/api/user/${props.id}`;
 
   const response = await fetch(url, {
     method: "PUT",

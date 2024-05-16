@@ -10,7 +10,7 @@ export interface Props {
 }
 
 const loader = async (props: Props) => {
-  const url = `https://cadeachave.onrender.com/api/sala`;
+  const url = `https://cadeachave-1715465469308.azurewebsites.net/api/sala`;
 
   const sala: Sala = {
     nome: props.nome,

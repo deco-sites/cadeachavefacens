@@ -11,7 +11,7 @@ interface Props {
 }
 
 const loader = async (props: Props) => {
-  const url = `https://cadeachave.onrender.com/api/user`;
+  const url = `https://cadeachave-1715465469308.azurewebsites.net/api/user`;
 
   const response = await fetch(url, {
     method: "POST",

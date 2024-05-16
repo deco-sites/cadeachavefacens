@@ -10,7 +10,8 @@ export interface Historico {
 }
 
 const loader = async (props: Props): Promise<Historico[] | null> => {
-  const url = "https://cadeachave.onrender.com/api/historico";
+  const url =
+    "https://cadeachave-1715465469308.azurewebsites.net/api/historico";
 
   const response = await fetch(url, {
     method: "GET",

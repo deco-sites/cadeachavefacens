@@ -11,7 +11,8 @@ export interface Props {
 }
 
 const loader = async (props: Props): Promise<Sala[] | null> => {
-  const url = `https://cadeachave.onrender.com/api/sala/nomeCom/${props.termo}`;
+  const url =
+    `https://cadeachave-1715465469308.azurewebsites.net/api/sala/nomeCom/${props.termo}`;
 
   const response = await fetch(url, {
     method: "GET",

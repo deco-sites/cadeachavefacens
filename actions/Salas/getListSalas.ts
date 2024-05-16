@@ -15,7 +15,7 @@ const loader = async (props: Props): Promise<Sala[] | null> => {
   console.log("props", props);
 
   const url =
-    `https://cadeachave.onrender.com/api/nome/${props.nome}/${props.abriu}`;
+    `https://cadeachave-1715465469308.azurewebsites.net/api/nome/${props.nome}/${props.abriu}`;
 
   const response = await fetch(url, {
     method: "GET",

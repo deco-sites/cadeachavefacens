@@ -4,7 +4,8 @@ export interface Props {
 }
 
 const login = async ({ user, password }: Props) => {
-  const url = "https://cadeachave.onrender.com/api/user/login";
+  const url =
+    "https://cadeachave-1715465469308.azurewebsites.net/api/user/login";
 
   const obj = {
     login: user,

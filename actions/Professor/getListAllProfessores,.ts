@@ -18,7 +18,8 @@ export interface Props {
 }
 
 const loader = async (props: Props): Promise<Professor[] | null> => {
-  const url = `https://cadeachave.onrender.com/api/professor`;
+  const url =
+    `https://cadeachave-1715465469308.azurewebsites.net/api/professor`;
 
   const response = await fetch(url, {
     method: "GET",
