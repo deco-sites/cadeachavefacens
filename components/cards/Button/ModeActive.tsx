@@ -40,6 +40,7 @@ export default function ButtonActive({ id, ativo, aberto, nome }: Props) {
     });
 
     active.value = res?.ativo || false;
+    sala.value.ativo = res?.ativo || false;
   }
 
   return (

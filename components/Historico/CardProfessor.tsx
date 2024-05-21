@@ -1,4 +1,5 @@
 import FlagSala from "../../sections/Cadastro/Flag.tsx";
+import ButtonActive from "deco-sites/cadeachavefacens/components/cards/Button/ModeActiveProfessor.tsx";
 import Icon from "../ui/Icon.tsx";
 
 interface Sala {
@@ -12,9 +13,12 @@ interface Props {
   nomeProfessor: string;
   cpf: string;
   salas: Sala[] | null;
+  ativo: boolean;
 }
 
-export default function CardProfesor({ id, nomeProfessor, cpf, salas }: Props) {
+export default function CardProfesor(
+  { id, nomeProfessor, cpf, salas, ativo }: Props,
+) {
   return (
     <div class="rounded-lg shadow-lg w-full h-auto flex flex-col justify-start items-center p-3 gap-2">
       <div class="flex flex-row gap-2 w-full">
@@ -37,9 +41,15 @@ export default function CardProfesor({ id, nomeProfessor, cpf, salas }: Props) {
         >
           <Icon id="Edit" size={24} />
         </a>
-        <button class=" font-semibold px-1 py-1 rounded-lg bg-[#FF0000] text-white">
-          <Icon id="Ban" size={24} />
-        </button>
+        <ButtonActive
+          professor={{
+            nome: nomeProfessor,
+            salas: salas || [],
+            id: id,
+            cpf: cpf,
+            ativo: ativo,
+          }}
+        />
       </div>
     </div>
   );

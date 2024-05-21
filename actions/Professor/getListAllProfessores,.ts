@@ -10,6 +10,7 @@ export interface Professor {
   nome: string;
   cpf: string;
   salas: Sala[];
+  ativo: boolean;
 }
 
 export interface Props {
@@ -53,6 +54,7 @@ const loader = async (props: Props): Promise<Professor[] | null> => {
       nome: item.nome,
       cpf: item.cpf,
       salas: arraySalas,
+      ativo: item.ativo,
     });
   });
 

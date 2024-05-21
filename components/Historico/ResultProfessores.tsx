@@ -33,6 +33,7 @@ export default function xResultProfessores() {
           cpf={professor.cpf}
           salas={professor.salas}
           id={professor.id}
+          ativo={professor.ativo}
         />
       ))}
     </div>

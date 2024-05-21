@@ -24,6 +24,7 @@ interface ProfessorPost {
   nome: string;
   cpf: string;
   salas: number[] | null;
+  ativo: boolean;
 }
 
 export interface Props {
@@ -97,6 +98,8 @@ export default function CadastroProfessores(props: Props) {
         isEdit.value = false;
       }
     }
+
+    console.log("edit", isEdit.value);
   }
 
   async function getListSalas() {
@@ -196,8 +199,16 @@ export default function CadastroProfessores(props: Props) {
       validateConfirmSenha.value = false;
     }
 
+    console.log(
+      "validate",
+      !isEdit.value,
+      refCPF.current?.value,
+      refName.current?.value,
+      refConfirSenha.current?.value,
+    );
+
     if (
-      !isEdit &&
+      !isEdit.value &&
       refCPF.current?.value && refName.current?.value &&
       refConfirSenha.current?.value
     ) {
@@ -217,6 +228,7 @@ export default function CadastroProfessores(props: Props) {
         nome: refName.current.value,
         cpf: refCPF.current.value,
         salas: arrayIndex || null,
+        ativo: false,
       };
 
       const res = await invoke.site.actions.Professor.postProfessor({
@@ -240,7 +252,10 @@ export default function CadastroProfessores(props: Props) {
       }
 
       console.log("res", res);
-    } else if (isEdit && refCPF.current?.value && refName.current?.value) {
+    } else if (
+      isEdit.value && refCPF.current?.value && refName.current?.value
+    ) {
+      console.log("put");
       const arrayIndex: number[] | null = [];
 
       if (listClassPost.value && listClassPost.value?.length > 0) {
@@ -255,6 +270,7 @@ export default function CadastroProfessores(props: Props) {
         nome: refName.current.value,
         cpf: refCPF.current.value,
         salas: arrayIndex || null,
+        ativo: false,
       };
 
       const res = await invoke.site.actions.Professor.putProfessor({
@@ -270,13 +286,13 @@ export default function CadastroProfessores(props: Props) {
           login: professorPut.cpf,
           password: "admin123",
           role: "USER",
-          professor_id: res,
+          professor_id: res?.id || 0,
           ativo: true,
         };
         const resUser = await invoke.site.actions.User.putUsuario({
           token: cookies,
           user: user,
-          id: res,
+          id: res.id,
         });
 
         console.log("user", resUser);
