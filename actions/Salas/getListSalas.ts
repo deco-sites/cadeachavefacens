@@ -9,13 +9,38 @@ export interface Props {
   token: string;
   nome: string;
   abriu: boolean;
+  ativo: boolean
 }
 
 const loader = async (props: Props): Promise<Sala[] | null> => {
   console.log("props", props);
 
+  const { nome, abriu, ativo } = props
+
+  const arrayCot: string[] = []
+
+  if (nome) {
+    arrayCot.push(`nome=${nome}`)
+  } if (abriu) {
+    arrayCot.push(`aberta=${abriu}`)
+  } if (!abriu) {
+    arrayCot.push(`aberto=${abriu}`)
+  } if (ativo) {
+    arrayCot.push(`ativo=${ativo}`)
+  } if (!ativo) {
+    arrayCot.push(`ativo=${ativo}`)
+  }
+
+  let stringUrl = ""
+
+  arrayCot.map((cont, index) => {
+    const condicao = index === 0 ? "?" : "&";
+
+    stringUrl += condicao + cont
+  })
+
   const url =
-    `https://cadeachave-1715465469308.azurewebsites.net/api/nome/${props.nome}/${props.abriu}`;
+    `https://cadeachave-1715465469308.azurewebsites.net/api/sala/nomeComEAberto`;
 
   const response = await fetch(url, {
     method: "GET",
