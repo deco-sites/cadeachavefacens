@@ -43,8 +43,6 @@ const loader = async (props: Props): Promise<Sala[] | null> => {
     stringUrl += condicao + cont;
   });
 
-  console.log("string", stringUrl)
-   
   const url =
     `https://cadeachave-1715465469308.azurewebsites.net/api/sala/nomeComEAberta${stringUrl}`;
 
