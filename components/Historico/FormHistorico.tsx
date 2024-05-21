@@ -4,6 +4,7 @@ import { ChangeEvent } from "https://esm.sh/v128/preact@10.19.6/compat/src/index
 import { signal, useSignal } from "@preact/signals";
 import { useRef } from "preact/compat";
 import { useUI } from "deco-sites/cadeachavefacens/sdk/useUI.ts";
+import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
 
 interface ProfessorCPFOrName {
   id?: number;
@@ -56,7 +57,7 @@ export default function FormHistorico() {
   }
 
   async function ApplyFilter() {
-    const cookies = document.cookie;
+    const cookies = getCookie("token");
 
     console.log(
       "date",
@@ -93,7 +94,7 @@ export default function FormHistorico() {
   const beforeDateinput = formatarDataParaInput(beforeDate);
 
   async function getResponseProfessores() {
-    const cookies = document.cookie;
+    const cookies = getCookie("token");
 
     const res = await invoke.site.actions.Professor.getCpfOrName({
       token: cookies,
@@ -104,7 +105,7 @@ export default function FormHistorico() {
   }
 
   async function getResponseSalas() {
-    const cookies = document.cookie;
+    const cookies = getCookie("token");
 
     const res = await invoke.site.actions.Professor.getListSala({
       token: cookies,
@@ -169,7 +170,7 @@ export default function FormHistorico() {
     inputAbriu.current!.checked = false;
     inputFechado.current!.checked = false;
 
-    const cookies = document.cookie;
+    const cookies = getCookie("token");
     const res = await invoke.site.loaders.Historic.ClassHistoric({
       token: cookies,
     });

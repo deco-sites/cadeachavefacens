@@ -9,35 +9,39 @@ export interface Props {
   token: string;
   nome: string;
   abriu: boolean;
-  ativo: boolean
+  ativo: boolean;
 }
 
 const loader = async (props: Props): Promise<Sala[] | null> => {
   console.log("props", props);
 
-  const { nome, abriu, ativo } = props
+  const { nome, abriu, ativo } = props;
 
-  const arrayCot: string[] = []
+  const arrayCot: string[] = [];
 
   if (nome) {
-    arrayCot.push(`nome=${nome}`)
-  } if (abriu) {
-    arrayCot.push(`aberta=${abriu}`)
-  } if (!abriu) {
-    arrayCot.push(`aberto=${abriu}`)
-  } if (ativo) {
-    arrayCot.push(`ativo=${ativo}`)
-  } if (!ativo) {
-    arrayCot.push(`ativo=${ativo}`)
+    arrayCot.push(`nome=${nome}`);
+  }
+  if (abriu) {
+    arrayCot.push(`aberta=${abriu}`);
+  }
+  if (!abriu) {
+    arrayCot.push(`aberto=${abriu}`);
+  }
+  if (ativo) {
+    arrayCot.push(`ativo=${ativo}`);
+  }
+  if (!ativo) {
+    arrayCot.push(`ativo=${ativo}`);
   }
 
-  let stringUrl = ""
+  let stringUrl = "";
 
   arrayCot.map((cont, index) => {
     const condicao = index === 0 ? "?" : "&";
 
-    stringUrl += condicao + cont
-  })
+    stringUrl += condicao + cont;
+  });
 
   const url =
     `https://cadeachave-1715465469308.azurewebsites.net/api/sala/nomeComEAberto`;

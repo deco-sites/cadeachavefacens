@@ -4,6 +4,7 @@ import { invoke } from "deco-sites/cadeachavefacens/runtime.ts";
 import FlagSala from "../Cadastro/Flag.tsx";
 import { signal, useSignal, useSignalEffect } from "@preact/signals";
 import { ChangeEvent, useRef } from "preact/compat";
+import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
 
 interface Sala {
   id?: number;
@@ -71,7 +72,7 @@ export default function CadastroProfessores(props: Props) {
   async function getProfessor() {
     const path = globalThis.window.location.pathname;
     const pathSearch = "editar-professor";
-    const cookies = document.cookie;
+    const cookies = getCookie("token");
 
     if (path.includes(pathSearch)) {
       isEdit.value = true;
@@ -99,7 +100,7 @@ export default function CadastroProfessores(props: Props) {
   }
 
   async function getListSalas() {
-    const cookies = document.cookie;
+    const cookies = getCookie("token");
 
     console.log("foi aq");
 
@@ -166,13 +167,13 @@ export default function CadastroProfessores(props: Props) {
   }
 
   function postProfessor() {
-    const cookies = document.cookie;
+    const cookies = getCookie("token");
 
     // const resProfessor = invoke.site.actions.Professor.postProfessor({ token: cookies, professor:})
   }
 
   async function createProf() {
-    const cookies = document.cookie;
+    const cookies = getCookie("token");
 
     if (!refName.current?.value) {
       validateName.value = true;

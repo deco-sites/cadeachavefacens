@@ -2,12 +2,13 @@ import { invoke } from "deco-sites/cadeachavefacens/runtime.ts";
 import { useUI } from "deco-sites/cadeachavefacens/sdk/useUI.ts";
 import { effect, useSignalEffect } from "@preact/signals";
 import CardSala from "deco-sites/cadeachavefacens/components/Historico/CardSala.tsx";
+import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
 
 export default function ResultSalas() {
   const { salas } = useUI();
 
   async function getHistorico() {
-    const cookies = document.cookie;
+    const cookies = getCookie("token");
 
     const res = await invoke.site.actions.Salas.getListAllSalas({
       token: cookies,

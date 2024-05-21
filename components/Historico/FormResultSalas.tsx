@@ -6,6 +6,7 @@ import {
 } from "https://esm.sh/v128/preact@10.19.6/compat/src/index.js";
 import { invoke } from "deco-sites/cadeachavefacens/runtime.ts";
 import { useUI } from "deco-sites/cadeachavefacens/sdk/useUI.ts";
+import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
 
 export interface Sala {
   nome: string;
@@ -23,7 +24,7 @@ export default function FormResultSalas() {
   const { salas } = useUI();
 
   async function getResponseSalas() {
-    const cookies = document.cookie;
+    const cookies = getCookie("token");
 
     const res = await invoke.site.actions.Professor.getListSala({
       token: cookies,
@@ -66,7 +67,7 @@ export default function FormResultSalas() {
   }
 
   async function ApplyFilter() {
-    const cookies = document.cookie;
+    const cookies = getCookie("token");
 
     console.log("filtrar", valueSala.value.nome);
     const res = await invoke.site.actions.Salas.getListSalas({

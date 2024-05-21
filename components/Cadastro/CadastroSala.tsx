@@ -5,6 +5,7 @@ import ButtonCustom from "deco-sites/cadeachavefacens/components/Cadastro/Button
 import Icon from "deco-sites/cadeachavefacens/components/ui/Icon.tsx";
 import { invoke } from "deco-sites/cadeachavefacens/runtime.ts";
 import CookieConsent from "deco-sites/cadeachavefacens/components/ui/CookieConsent.tsx";
+import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
 
 export interface Props {
   title: string;
@@ -48,7 +49,7 @@ export default function CadastroSala(props: Props) {
   }
 
   function postArraySala() {
-    const cookies = document.cookie;
+    const cookies = getCookie("token");
 
     arraySalas.value.map(async (sala: string) => {
       const res = await invoke.site.actions.Salas.postSala({

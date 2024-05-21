@@ -3,6 +3,7 @@ import { useRef } from "preact/compat";
 import { invoke } from "deco-sites/cadeachavefacens/runtime.ts";
 import { useUI } from "deco-sites/cadeachavefacens/sdk/useUI.ts";
 import { useSignal } from "@preact/signals";
+import { setCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
 
 export default function () {
   const user = useRef<HTMLInputElement>(null);
@@ -41,7 +42,7 @@ export default function () {
         } else {
           console.log("token", res);
           token.value = res;
-          document.cookie = res.token;
+          setCookie("token", res.token, 0)
           window.location.pathname = "/historico";
         }
       }

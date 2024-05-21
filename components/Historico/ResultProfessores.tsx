@@ -2,12 +2,13 @@ import { invoke } from "deco-sites/cadeachavefacens/runtime.ts";
 import { useUI } from "deco-sites/cadeachavefacens/sdk/useUI.ts";
 import { effect, useSignalEffect } from "@preact/signals";
 import CardProfesor from "deco-sites/cadeachavefacens/components/Historico/CardProfessor.tsx";
+import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
 
 export default function xResultProfessores() {
   const { professores } = useUI();
 
   async function getHistorico() {
-    const cookies = document.cookie;
+    const cookies = getCookie("token");
 
     const res = await invoke.site.actions.Professor["getListAllProfessores,"]({
       token: cookies,

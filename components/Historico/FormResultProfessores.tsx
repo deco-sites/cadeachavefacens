@@ -4,6 +4,7 @@ import { useRef } from "preact/compat";
 import { useUI } from "deco-sites/cadeachavefacens/sdk/useUI.ts";
 import { ChangeEvent } from "https://esm.sh/v128/preact@10.19.6/compat/src/index.js";
 import { invoke } from "deco-sites/cadeachavefacens/runtime.ts";
+import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
 
 interface ProfessorCPFOrName {
   id?: number;
@@ -18,7 +19,7 @@ export default function FormResultProfessores() {
   const { professores } = useUI();
 
   async function ApplyFilter() {
-    const cookies = document.cookie;
+    const cookies = getCookie("token");
 
     const res = await invoke.site.actions.Professor.getListProfessores({
       token: cookies,
@@ -31,7 +32,7 @@ export default function FormResultProfessores() {
   }
 
   async function getResponseProfessores() {
-    const cookies = document.cookie;
+    const cookies = getCookie("token");
 
     const res = await invoke.site.actions.Professor.getCpfOrName({
       token: cookies,
@@ -77,7 +78,7 @@ export default function FormResultProfessores() {
   async function ClearFilter() {
     valueProfessor.value.nome = "";
 
-    const cookies = document.cookie;
+    const cookies = getCookie("token");
     const res = await invoke.site.actions.Professor["getListAllProfessores,"]({
       token: cookies,
     });
