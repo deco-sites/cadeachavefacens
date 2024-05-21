@@ -69,7 +69,7 @@ export default function FormResultSalas() {
   async function ApplyFilter() {
     const cookies = getCookie("token");
 
-    console.log("filtrar", valueSala.value.nome);
+    console.log("filtrar", valueSala.value.nome, abriu.value);
     const res = await invoke.site.actions.Salas.getListSalas({
       token: cookies,
       nome: valueSala.value.nome,

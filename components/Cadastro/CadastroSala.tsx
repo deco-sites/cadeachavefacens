@@ -60,7 +60,7 @@ export default function CadastroSala(props: Props) {
   }
 
   return (
-    <div class="w-full h-full flex justify-center ">
+    <div class="w-full h-full flex justify-center pt-8">
       <div class="rounded-2xl border shadow-xl p-2 gap-4 flex flex-col lg:min-w-[440px]">
         <h1 class="uppercase text-4xl text-center">{props.title}</h1>
         <span class="text-sm">

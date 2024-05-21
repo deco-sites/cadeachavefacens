@@ -42,7 +42,7 @@ export default function () {
         } else {
           console.log("token", res);
           token.value = res;
-          setCookie("token", res.token, 0)
+          setCookie("token", res.token, 0);
           window.location.pathname = "/historico";
         }
       }

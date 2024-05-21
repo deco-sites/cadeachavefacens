@@ -26,12 +26,12 @@ const loader = async (props: Props): Promise<Sala[] | null> => {
     arrayCot.push(`aberta=${abriu}`);
   }
   if (!abriu) {
-    arrayCot.push(`aberto=${abriu}`);
+    arrayCot.push(`aberta=${abriu}`);
   }
   if (ativo) {
     arrayCot.push(`ativo=${ativo}`);
   }
-  if (!ativo) {
+  if (ativo == false) {
     arrayCot.push(`ativo=${ativo}`);
   }
 
@@ -43,8 +43,10 @@ const loader = async (props: Props): Promise<Sala[] | null> => {
     stringUrl += condicao + cont;
   });
 
+  console.log("string", stringUrl)
+   
   const url =
-    `https://cadeachave-1715465469308.azurewebsites.net/api/sala/nomeComEAberto`;
+    `https://cadeachave-1715465469308.azurewebsites.net/api/sala/nomeComEAberta${stringUrl}`;
 
   const response = await fetch(url, {
     method: "GET",
