@@ -1,13 +1,14 @@
+import ButtonActive from "deco-sites/cadeachavefacens/islands/Button/ModeActive.tsx";
 import Icon from "../ui/Icon.tsx";
 
 export interface Sala {
   nome: string;
-  id?: number;
+  id: number;
   aberta: boolean;
-  ativo?: boolean;
+  ativo: boolean;
 }
 
-export default function CardSala({ nome, aberta }: Sala) {
+export default function CardSala({ nome, aberta, id, ativo }: Sala) {
   return (
     <div class="rounded-lg shadow-lg w-full h-auto flex flex-col justify-start items-center p-3 gap-2">
       <div class="flex flex-row gap-2 w-full">
@@ -32,9 +33,7 @@ export default function CardSala({ nome, aberta }: Sala) {
         <button class=" font-semibold px-1 py-1 rounded-lg bg-[#66F5A7] text-white">
           <Icon id="Edit" size={24} />
         </button>
-        <button class=" font-semibold px-1 py-1 rounded-lg bg-[#FF0000] text-white">
-          <Icon id="Ban" size={24} />
-        </button>
+        <ButtonActive id={id} ativo={ativo} nome={nome} aberto={aberta} />
         <button class="text-black font-semibold px-2 py-1 rounded-lg bg-[#A8A8A8]">
           Fechar Remoto
         </button>

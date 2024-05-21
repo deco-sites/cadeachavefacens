@@ -14,8 +14,9 @@ import * as $$$$$$$$$8 from "./actions/Professor/putProfessor.ts";
 import * as $$$$$$$$$9 from "./actions/Salas/getListAllSalas.ts";
 import * as $$$$$$$$$10 from "./actions/Salas/getListSalas.ts";
 import * as $$$$$$$$$11 from "./actions/Salas/postSala.ts";
-import * as $$$$$$$$$12 from "./actions/User/postUsuario.ts";
-import * as $$$$$$$$$13 from "./actions/User/putUsuario.ts";
+import * as $$$$$$$$$12 from "./actions/Salas/putSala.ts";
+import * as $$$$$$$$$13 from "./actions/User/postUsuario.ts";
+import * as $$$$$$$$$14 from "./actions/User/putUsuario.ts";
 import * as $$$$$$$$$$$0 from "./apps/decohub.ts";
 import * as $$$$$$$$$$$1 from "./apps/site.ts";
 import * as $$$3 from "./loaders/availableIcons.ts";
@@ -161,8 +162,9 @@ const manifest = {
     "site/actions/Salas/getListAllSalas.ts": $$$$$$$$$9,
     "site/actions/Salas/getListSalas.ts": $$$$$$$$$10,
     "site/actions/Salas/postSala.ts": $$$$$$$$$11,
-    "site/actions/User/postUsuario.ts": $$$$$$$$$12,
-    "site/actions/User/putUsuario.ts": $$$$$$$$$13,
+    "site/actions/Salas/putSala.ts": $$$$$$$$$12,
+    "site/actions/User/postUsuario.ts": $$$$$$$$$13,
+    "site/actions/User/putUsuario.ts": $$$$$$$$$14,
   },
   "apps": {
     "site/apps/decohub.ts": $$$$$$$$$$$0,

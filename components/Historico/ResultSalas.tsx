@@ -28,7 +28,12 @@ export default function ResultSalas() {
   return (
     <>
       {salas.value?.map((sala) => (
-        <CardSala nome={sala.nome} aberta={sala.aberta} />
+        <CardSala
+          nome={sala.nome}
+          aberta={sala.aberta}
+          id={sala.id}
+          ativo={sala.ativo}
+        />
       ))}
     </>
   );
