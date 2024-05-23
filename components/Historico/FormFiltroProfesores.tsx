@@ -12,7 +12,7 @@ export default function FormFiltroProfessores() {
           <h2 class="text-3xl font-semibold">Filtros de Profesores:</h2>
           <FormResultProfessores />
         </div>
-        <div class="flex flex-col gap-2 col-span-2 col-start-2 max-h-[80vh] overflow-y-auto">
+        <div class="flex flex-col gap-2 col-span-2 col-start-2 max-h-[80vh] overflow-y-auto px-2 pb-6">
           <ResultProfessores />
         </div>
       </div>

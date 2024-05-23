@@ -2,14 +2,14 @@ interface User {
   login: string;
   password?: string;
   role: string;
-  professor_id: number;
   ativo?: boolean;
+  professor_id: number;
 }
 
 interface Props {
   token: string;
   user: User;
-  id: number;
+  id: string;
 }
 
 const loader = async (props: Props) => {
@@ -25,7 +25,7 @@ const loader = async (props: Props) => {
     body: JSON.stringify(props.user),
   }).then((r) => r.json()).catch((r) => console.error("error", r));
 
-  console.log("put", response);
+  console.log("put", response, props);
 
   if (!response) {
     return null;

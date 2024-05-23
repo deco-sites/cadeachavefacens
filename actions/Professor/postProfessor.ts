@@ -2,6 +2,7 @@ interface Professor {
   nome: string;
   cpf: string;
   salas: number[] | null;
+  ativo: boolean;
 }
 
 interface Props {
@@ -16,9 +17,10 @@ const loader = async (props: Props): Promise<number | null> => {
     nome: props.professor.nome,
     cpf: props.professor.cpf,
     salas: props.professor.salas,
+    ativo: props.professor.ativo,
   };
 
-  console.log("profesor", professor);
+  console.log("profesor", JSON.stringify(professor));
 
   const response = await fetch(url, {
     method: "POST",
@@ -29,7 +31,7 @@ const loader = async (props: Props): Promise<number | null> => {
     body: JSON.stringify(professor),
   }).then((r) => r.json()).catch((r) => console.error("error", r));
 
-  console.log("response", response);
+  console.log("response", response, props);
 
   if (!response) {
     return null;

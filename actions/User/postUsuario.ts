@@ -2,7 +2,6 @@ interface User {
   login: string;
   password?: string;
   role: string;
-  professor_id: number;
 }
 
 interface Props {
@@ -21,6 +20,8 @@ const loader = async (props: Props) => {
     },
     body: JSON.stringify(props.user),
   }).then((r) => r.json()).catch((r) => console.error("error", r));
+
+  console.log("responseUsuario", response, "props", props);
 
   if (!response) {
     return null;

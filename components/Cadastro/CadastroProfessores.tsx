@@ -13,13 +13,6 @@ interface Sala {
   ativo?: boolean;
 }
 
-export interface Professor {
-  id: number;
-  nome: string;
-  cpf: string;
-  salas: Sala[];
-}
-
 interface ProfessorPost {
   nome: string;
   cpf: string;
@@ -36,20 +29,39 @@ export interface Props {
   inputClass: string;
 }
 
-interface User {
+export interface Professor {
+  id?: number;
+  nome: string;
+  cpf: string;
+  salas: Sala[] | undefined | null;
+}
+
+export interface User {
+  professor_id: number;
+  login: string;
+  password: string;
+  role: string;
+  ative: boolean;
+  professor: Professor;
+  id: string;
+}
+
+interface UserPost {
   login: string;
   password?: string;
   role: string;
-  professor_id: number;
   ativo?: boolean;
+  professor_id: number;
 }
 
 export default function CadastroProfessores(props: Props) {
-  const professor = useSignal<Professor | null>(null);
+  const professor = useSignal<User | null>(null);
   const refName = useRef<HTMLInputElement | null>(null);
   const refCPF = useRef<HTMLInputElement | null>(null);
   const refSenha = useRef<HTMLInputElement | null>(null);
   const refConfirSenha = useRef<HTMLInputElement | null>(null);
+  const refUSER = useRef<HTMLInputElement | null>(null);
+  const refADMIN = useRef<HTMLInputElement | null>(null);
 
   const validateName = useSignal(false);
   const validateCPF = useSignal(false);
@@ -57,7 +69,7 @@ export default function CadastroProfessores(props: Props) {
   const validateConfirmSenha = useSignal(false);
 
   const listSalas = useSignal<Sala[] | null>(null);
-  const listClassPost = useSignal<Sala[] | null>(null);
+  const listClassPost = useSignal<Sala[] | undefined | null>(null);
 
   const valueSala = useSignal<Sala>({ nome: "" });
   const selectDivSalas = useSignal(false);
@@ -83,7 +95,8 @@ export default function CadastroProfessores(props: Props) {
       // Verifique se a string foi encontrada
       if (position !== -1) {
         // Pegue o caractere depois da string
-        const id = path[position + pathSearch.length + 1];
+        const index = position + pathSearch.length;
+        const id = path.substring(index);
 
         const res = await invoke.site.actions.Professor.getProfesorId({
           token: cookies,
@@ -91,9 +104,15 @@ export default function CadastroProfessores(props: Props) {
         });
 
         professor.value = res;
-        listClassPost.value = professor.value?.salas || null;
+        listClassPost.value = professor.value?.professor.salas;
 
-        console.log("professor", professor.value?.salas, listClassPost.value);
+        if (professor.value?.role == "USER") {
+          refUSER.current!.checked = true;
+        } else {
+          refADMIN.current!.checked = true;
+        }
+
+        console.log("professor", professor.value, listClassPost.value);
       } else {
         isEdit.value = false;
       }
@@ -236,12 +255,22 @@ export default function CadastroProfessores(props: Props) {
         professor: professor,
       });
 
+      console.log("res professor", res);
+
       if (res) {
         const user: User = {
           login: professor.cpf,
           password: refConfirSenha.current.value,
-          role: "USER",
-          professor_id: await res,
+          role: refUSER.current?.checked ? "USER" : "ADMIN",
+          ative: professor.ativo,
+          professor_id: res,
+          id: "",
+          professor: {
+            nome: professor.nome,
+            cpf: professor.cpf,
+            salas: listClassPost.value,
+            id: res,
+          },
         };
         const resUser = await invoke.site.actions.User.postUsuario({
           token: cookies,
@@ -253,11 +282,11 @@ export default function CadastroProfessores(props: Props) {
 
       console.log("res", res);
     } else if (
-      isEdit.value && refCPF.current?.value && refName.current?.value
+      isEdit.value && refCPF.current?.value && refName.current?.value &&
+      refConfirSenha.current?.value
     ) {
       console.log("put");
       const arrayIndex: number[] | null = [];
-
       if (listClassPost.value && listClassPost.value?.length > 0) {
         listClassPost.value.map((index) => {
           if (index.id) {
@@ -276,23 +305,26 @@ export default function CadastroProfessores(props: Props) {
       const res = await invoke.site.actions.Professor.putProfessor({
         token: cookies,
         professor: professorPut,
-        id: professor.value?.id,
+        id: professor.value?.professor.id,
       });
 
       console.log("resPut", res);
 
       if (res) {
-        const user: User = {
+        const user: UserPost = {
           login: professorPut.cpf,
-          password: "admin123",
-          role: "USER",
-          professor_id: res?.id || 0,
+          password: refConfirSenha.current.value,
+          role: refUSER.current?.checked && "USER" || "ADMIN",
+          professor_id: res.id || professor.value?.professor_id || 0,
           ativo: true,
         };
+
+        console.log("User put");
+
         const resUser = await invoke.site.actions.User.putUsuario({
           token: cookies,
           user: user,
-          id: res.id,
+          id: professor.value?.id,
         });
 
         console.log("user", resUser);
@@ -313,7 +345,7 @@ export default function CadastroProfessores(props: Props) {
         </span>
         <input
           type={"text"}
-          value={professor.value?.nome}
+          value={professor.value?.professor.nome}
           ref={refName}
           class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
         >
@@ -328,7 +360,7 @@ export default function CadastroProfessores(props: Props) {
         </span>
         <input
           type={"text"}
-          value={professor.value?.cpf}
+          value={professor.value?.professor.cpf}
           ref={refCPF}
           class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
         >
@@ -364,6 +396,27 @@ export default function CadastroProfessores(props: Props) {
         {validateConfirmSenha.value && (
           <span class="text-xs text-red-600">As senhas estão incorretas*</span>
         )}
+        <span>Tipo do usuario:</span>
+        <div class="flex flex-row gap-2">
+          <input
+            type="radio"
+            required
+            ref={refADMIN}
+            id="ADMIN"
+            name="ROLE"
+            value="ADMIN"
+          />
+          <label for="ADMIN">ADMIN</label>
+          <input
+            type="radio"
+            required
+            ref={refUSER}
+            id="USER"
+            name="ROLE"
+            value="USER"
+          />
+          <label for="USER">USER</label>
+        </div>
         <span class="text-sm">
           {props.inputClass}
         </span>

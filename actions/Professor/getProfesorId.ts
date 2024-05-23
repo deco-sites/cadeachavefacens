@@ -9,16 +9,17 @@ export interface Professor {
   id: number;
   nome: string;
   cpf: string;
-  salas: Sala[];
+  salas: Sala[] | null;
 }
 
 export interface User {
-  id: string;
+  professor_id: number;
   login: string;
   password: string;
   role: string;
   ative: boolean;
   professor: Professor;
+  id: string;
 }
 
 export interface Props {
@@ -26,17 +27,19 @@ export interface Props {
   id: string;
 }
 
-const loader = async (props: Props): Promise<Professor | null> => {
+const loader = async (props: Props): Promise<User | null> => {
   const url =
-    `https://cadeachave-1715465469308.azurewebsites.net/api/professor/${props.id}`;
+    `https://cadeachave-1715465469308.azurewebsites.net/api/user/professor/${props.id}`;
 
-  const response: Professor = await fetch(url, {
+  const response = await fetch(url, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       "Authorization": "Bearer " + props.token,
     },
   }).then((r) => r.json()).catch((r) => console.error("error", r));
+
+  console.log("response", response, props);
 
   if (!response) {
     return null;
