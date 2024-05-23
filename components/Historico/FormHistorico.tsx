@@ -47,11 +47,25 @@ export default function FormHistorico() {
   const beforeDate = new Date(beforeYear, beforeMonth);
 
   function formatarDataParaDate(dateS: string) {
-    // Adiciona ":00" para representar os segundos
-    const novaString = dateS + ":00";
+    // Converte a string para um objeto Date
+    // deno-lint-ignore prefer-const
+    let date = new Date(dateS);
 
-    // Converte a string para o formato desejado
-    const dataFormatada = novaString.replace("T", " ");
+    // Adiciona 3 horas
+    date.setHours(date.getHours() + 3);
+
+    // Formata a data de volta para uma string no formato desejado
+    // yyyy-mm-dd hh:mm:ss
+    const ano = date.getFullYear();
+    const mes = String(date.getMonth() + 1).padStart(2, "0"); // Meses são de 0 a 11
+    const dia = String(date.getDate()).padStart(2, "0");
+    const horas = String(date.getHours()).padStart(2, "0");
+    const minutos = String(date.getMinutes()).padStart(2, "0");
+    const segundos = String(date.getSeconds()).padStart(2, "0");
+
+    // Constrói a string no formato desejado
+    const dataFormatada =
+      `${ano}-${mes}-${dia} ${horas}:${minutos}:${segundos}`;
 
     return dataFormatada;
   }
