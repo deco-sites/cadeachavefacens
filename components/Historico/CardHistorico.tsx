@@ -11,7 +11,7 @@ export default function CardHistorico(
   const data = new Date(horario);
 
   return (
-    <div class="rounded-lg shadow-lg w-full h-auto flex flex-col justify-start items-center p-3">
+    <div class="rounded-lg shadow-lg w-full h-auto flex flex-col justify-start items-center p-3 border-gray-400 border">
       <div class="flex flex-row gap-2 w-full">
         <span class="text-xl font-semibold">Sala:</span>
         <span class="text-xl font-semibold">{sala}</span>
