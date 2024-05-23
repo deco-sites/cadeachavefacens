@@ -13,6 +13,7 @@ import * as $Button_ModeActive from "./islands/Button/ModeActive.tsx";
 import * as $Button_ModeActiveProfessor from "./islands/Button/ModeActiveProfessor.tsx";
 import * as $Cadastro_CadastroProfessor from "./islands/Cadastro/CadastroProfessor.tsx";
 import * as $Cadastro_CadastroSala from "./islands/Cadastro/CadastroSala.tsx";
+import * as $Cadastro_EditarSala from "./islands/Cadastro/EditarSala.tsx";
 import * as $Header_Buttons from "./islands/Header/Buttons.tsx";
 import * as $Header_Cart_linx from "./islands/Header/Cart/linx.tsx";
 import * as $Header_Cart_nuvemshop from "./islands/Header/Cart/nuvemshop.tsx";
@@ -54,6 +55,7 @@ const manifest = {
     "./islands/Button/ModeActiveProfessor.tsx": $Button_ModeActiveProfessor,
     "./islands/Cadastro/CadastroProfessor.tsx": $Cadastro_CadastroProfessor,
     "./islands/Cadastro/CadastroSala.tsx": $Cadastro_CadastroSala,
+    "./islands/Cadastro/EditarSala.tsx": $Cadastro_EditarSala,
     "./islands/Header/Buttons.tsx": $Header_Buttons,
     "./islands/Header/Cart/linx.tsx": $Header_Cart_linx,
     "./islands/Header/Cart/nuvemshop.tsx": $Header_Cart_nuvemshop,

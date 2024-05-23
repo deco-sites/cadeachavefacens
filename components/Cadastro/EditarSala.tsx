@@ -24,8 +24,10 @@ export default function EditarSala(props: Props) {
 
   async function getSala() {
     const path = globalThis.window.location.pathname;
-    const pathSearch = "editar-sala";
+    const pathSearch = "editar-sala/";
     const cookies = getCookie("token");
+
+    console.log("page", path);
 
     if (path.includes(pathSearch)) {
       // Encontre a posição da string desejada
@@ -42,16 +44,18 @@ export default function EditarSala(props: Props) {
           id: parseInt(id),
         });
 
+        console.log("sala", res, id);
+
         sala.value = res;
       }
     }
   }
 
-  function putSala() {
+  async function putSala() {
     const cookies = getCookie("token");
 
     if (refInput.current?.value) {
-      const res = invoke.site.actions.Salas.putSala({
+      const res = await invoke.site.actions.Salas.putSala({
         token: cookies,
         nome: refInput.current.value,
         id: sala.value?.id,
@@ -69,6 +73,7 @@ export default function EditarSala(props: Props) {
 
   useSignalEffect(() => {
     getSala();
+    console.log("carregou");
   });
 
   return (

@@ -30,9 +30,12 @@ export default function CardSala({ nome, aberta, id, ativo }: Sala) {
           )}
       </div>
       <div class="flex flex-row gap-2 w-full">
-        <button class=" font-semibold px-1 py-1 rounded-lg bg-[#66F5A7] text-white">
+        <a
+          href={`editar-sala/${id}`}
+          class=" font-semibold px-1 py-1 rounded-lg bg-[#66F5A7] text-white"
+        >
           <Icon id="Edit" size={24} />
-        </button>
+        </a>
         <ButtonActive id={id} ativo={ativo} nome={nome} aberto={aberta} />
         <button class="text-black font-semibold px-2 py-1 rounded-lg bg-[#A8A8A8]">
           Fechar Remoto
