@@ -1,1 +1,1 @@
-{"name":"Editar Sala","path":"/editar-sala","sections":[{"__resolveType":"Header - 01"},{"__resolveType":"Preview site/sections/Cadastro/CadastroSala.tsx"}],"__resolveType":"website/pages/Page.tsx"}
+{"name":"Editar Sala","path":"/editar-sala/:slug","sections":[{"__resolveType":"Header - 01"},{"__resolveType":"site/sections/Cadastro/EditarSala.tsx","title":"Editar Sala","input":"Sala:"}],"__resolveType":"website/pages/Page.tsx"}
