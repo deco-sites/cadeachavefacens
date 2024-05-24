@@ -6,6 +6,7 @@ import Icon from "deco-sites/cadeachavefacens/components/ui/Icon.tsx";
 import { invoke } from "deco-sites/cadeachavefacens/runtime.ts";
 import CookieConsent from "deco-sites/cadeachavefacens/components/ui/CookieConsent.tsx";
 import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
+import FlagStatus from "deco-sites/cadeachavefacens/components/Flags/FlagStatus.tsx";
 
 export interface Props {
   title: string;
@@ -18,6 +19,8 @@ export default function CadastroSala(props: Props) {
   const teste = useSignal<string>("");
   const arraySala = useSignal<Array<string>>([]);
   const refInput = useRef<HTMLInputElement>(null);
+  const toast = useSignal<boolean>(false);
+  const status = useSignal<boolean>(false);
 
   function addSala() {
     const value = refInput.current?.value;
@@ -51,16 +54,41 @@ export default function CadastroSala(props: Props) {
   function postArraySala() {
     const cookies = getCookie("token");
 
-    arraySalas.value.map(async (sala: string) => {
+    arraySalas.value.map(async (sala: string, index: number) => {
       const res = await invoke.site.actions.Salas.postSala({
         token: cookies,
         nome: sala,
       });
+
+      if (arraySala.value.length === (index + 1)) {
+        if (res) {
+          status.value = true;
+          toast.value = true;
+        } else {
+          status.value = false;
+        }
+        toast.value = true;
+      }
+
+      setTimeout(() => {
+        toast.value = false;
+      }, 2000);
+      if (status.value) {
+        setTimeout(() => {
+          globalThis.document.location.pathname = "/historico-salas";
+        }, 500);
+      }
     });
   }
 
   return (
-    <div class="w-full h-full flex justify-center pt-8">
+    <div class="w-full h-full flex justify-center pt-8 overflow-x-hidden relative pb-6">
+      <FlagStatus
+        show={toast.value}
+        status={status.value}
+        successLabel="Sala(s) criada(s) com Sucesso"
+        errorLabel="Falha. Tente novamente mais tarde"
+      />
       <div class="rounded-2xl border shadow-xl p-2 gap-4 flex flex-col lg:min-w-[440px]">
         <h1 class="uppercase text-4xl text-center">{props.title}</h1>
         <span class="text-sm">
@@ -86,7 +114,12 @@ export default function CadastroSala(props: Props) {
           <div class="flex flex-row gap-2">
             {arraySala.value.map((sala: string) => {
               console.log("map");
-              return <FlagSala label={sala} action={() => removeFlag(sala)} />;
+              return (
+                <FlagSala
+                  label={sala}
+                  action={() => removeFlag(sala)}
+                />
+              );
             })}
           </div>
         )}

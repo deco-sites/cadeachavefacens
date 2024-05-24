@@ -9,7 +9,7 @@ export interface Props {
   nome: string;
 }
 
-const loader = async (props: Props) => {
+const loader = async (props: Props): Promise<boolean> => {
   const url = `https://cadeachave-1715465469308.azurewebsites.net/api/sala`;
 
   const sala: Sala = {
@@ -25,11 +25,13 @@ const loader = async (props: Props) => {
       "Authorization": "Bearer " + props.token,
     },
     body: JSON.stringify(sala),
-  }).then((r) => r.json()).catch((r) => console.error("error", r));
+  }).then((r) => {
+    return r;
+  });
 
-  if (!response) {
-    return null;
-  }
+  console.log("responseSala", response);
+
+  return response.ok;
 };
 
 export default loader;

@@ -9,7 +9,7 @@ interface Props {
   user: User;
 }
 
-const loader = async (props: Props) => {
+const loader = async (props: Props): Promise<boolean> => {
   const url = `https://cadeachave-1715465469308.azurewebsites.net/api/user`;
 
   const response = await fetch(url, {
@@ -19,13 +19,9 @@ const loader = async (props: Props) => {
       "Authorization": "Bearer " + props.token,
     },
     body: JSON.stringify(props.user),
-  }).then((r) => r.json()).catch((r) => console.error("error", r));
-
-  console.log("responseUsuario", response, "props", props);
-
-  if (!response) {
-    return null;
-  }
+  }).then((r) => {
+    return r.ok;
+  });
 
   return response;
 };

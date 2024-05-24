@@ -5,6 +5,7 @@ import FlagSala from "../Cadastro/Flag.tsx";
 import { signal, useSignal, useSignalEffect } from "@preact/signals";
 import { ChangeEvent, useRef } from "preact/compat";
 import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
+import FlagStatus from "deco-sites/cadeachavefacens/components/Flags/FlagStatus.tsx";
 
 interface Sala {
   id?: number;
@@ -73,6 +74,9 @@ export default function CadastroProfessores(props: Props) {
 
   const valueSala = useSignal<Sala>({ nome: "" });
   const selectDivSalas = useSignal(false);
+
+  const toast = useSignal<boolean>(false);
+  const status = useSignal<boolean>(false);
 
   const isEdit = useSignal(false);
 
@@ -277,7 +281,17 @@ export default function CadastroProfessores(props: Props) {
           user: user,
         });
 
-        console.log("user", resUser);
+        if (resUser) {
+          status.value = true;
+          toast.value = true;
+        } else {
+          status.value = false;
+        }
+        toast.value = true;
+
+        setTimeout(() => {
+          toast.value = false;
+        }, 2000);
       }
 
       console.log("res", res);
@@ -308,8 +322,6 @@ export default function CadastroProfessores(props: Props) {
         id: professor.value?.professor.id,
       });
 
-      console.log("resPut", res);
-
       if (res) {
         const user: UserPost = {
           login: professorPut.cpf,
@@ -319,15 +331,23 @@ export default function CadastroProfessores(props: Props) {
           ativo: true,
         };
 
-        console.log("User put");
-
         const resUser = await invoke.site.actions.User.putUsuario({
           token: cookies,
           user: user,
           id: professor.value?.id,
         });
 
-        console.log("user", resUser);
+        if (resUser) {
+          status.value = true;
+          toast.value = true;
+        } else {
+          status.value = false;
+        }
+        toast.value = true;
+
+        setTimeout(() => {
+          toast.value = false;
+        }, 2000);
       }
     }
   }
@@ -337,7 +357,13 @@ export default function CadastroProfessores(props: Props) {
   });
 
   return (
-    <div class="w-full h-full flex justify-center pt-6 pb-6">
+    <div class="w-full h-full flex justify-center pt-6 pb-6 overflow-x-hidden relative">
+      <FlagStatus
+        show={toast.value}
+        status={status.value}
+        successLabel="Professor Editada com Sucesso"
+        errorLabel="Falha. Tente novamente mais tarde"
+      />
       <div class="rounded-2xl border shadow-xl p-2 gap-2 flex flex-col lg:min-w-[440px]">
         <h1 class="uppercase text-4xl text-center mb-3">{props.title}</h1>
         <span class="text-sm">

@@ -3,6 +3,7 @@ import { useSignal, useSignalEffect } from "@preact/signals";
 import ButtonCustom from "deco-sites/cadeachavefacens/components/Cadastro/ButtonCustom.tsx";
 import { invoke } from "deco-sites/cadeachavefacens/runtime.ts";
 import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
+import FlagStatus from "deco-sites/cadeachavefacens/components/Flags/FlagStatus.tsx";
 
 export interface Props {
   title: string;
@@ -21,6 +22,8 @@ export default function EditarSala(props: Props) {
   const refInput = useRef<HTMLInputElement>(null);
   const validadeInput = useSignal<boolean>(false);
   const sala = useSignal<Sala | null>(null);
+  const toast = useSignal<boolean>(false);
+  const status = useSignal<boolean>(false);
 
   async function getSala() {
     const path = globalThis.window.location.pathname;
@@ -63,7 +66,17 @@ export default function EditarSala(props: Props) {
         ativo: sala.value?.ativo,
       });
 
-      console.log("response Sala", res);
+      if (res) {
+        status.value = true;
+        toast.value = true;
+      } else {
+        status.value = false;
+      }
+      toast.value = true;
+
+      setTimeout(() => {
+        toast.value = false;
+      }, 2000);
 
       validadeInput.value = false;
     } else {
@@ -77,7 +90,13 @@ export default function EditarSala(props: Props) {
   });
 
   return (
-    <div class="w-full h-full flex justify-center pt-8">
+    <div class="w-full h-full flex justify-center pt-8 overflow-x-hidden relative pb-6">
+      <FlagStatus
+        show={toast.value}
+        status={status.value}
+        successLabel="Sala Editada com Sucesso"
+        errorLabel="Falha. Tente novamente mais tarde"
+      />
       <div class="rounded-2xl border shadow-xl p-2 gap-4 flex flex-col lg:min-w-[440px]">
         <h1 class="uppercase text-4xl text-center">{props.title}</h1>
         <span class="text-sm">

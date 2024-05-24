@@ -23,15 +23,11 @@ const loader = async (props: Props) => {
       "Authorization": "Bearer " + props.token,
     },
     body: JSON.stringify(props.user),
-  }).then((r) => r.json()).catch((r) => console.error("error", r));
+  }).then((r) => {
+    return r.ok;
+  });
 
-  console.log("put", response, props);
-
-  if (!response) {
-    return null;
-  }
-
-  return response.id;
+  return response;
 };
 
 export default loader;
