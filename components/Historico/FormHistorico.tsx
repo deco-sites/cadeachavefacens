@@ -29,7 +29,7 @@ export default function FormHistorico() {
   const inputAbriu = useRef<HTMLInputElement>(null);
   const inputFechado = useRef<HTMLInputElement>(null);
   const abriu = useSignal<boolean | undefined>(undefined);
-  const { historico } = useUI();
+  const { historico, loading } = useUI();
 
   const date = new Date();
 
@@ -73,12 +73,7 @@ export default function FormHistorico() {
   async function ApplyFilter() {
     const cookies = getCookie("token");
 
-    console.log(
-      "date",
-      valueProfessor.value.id,
-      valueSala.value.id,
-      abriu.value,
-    );
+    loading.value = true;
 
     const iDate = formatarDataParaDate(initialDate.current!.value);
     const fDate = formatarDataParaDate(finalDate.current!.value);
@@ -90,6 +85,10 @@ export default function FormHistorico() {
       abriu: abriu.value,
       dataInicial: iDate,
       dataFinal: fDate,
+    }).then((r) => {
+      return r;
+    }).finally(() => {
+      loading.value = false;
     });
 
     historico.value = res;

@@ -337,7 +337,7 @@ export default function CadastroProfessores(props: Props) {
   });
 
   return (
-    <div class="w-full h-full flex justify-center pt-6">
+    <div class="w-full h-full flex justify-center pt-6 pb-6">
       <div class="rounded-2xl border shadow-xl p-2 gap-2 flex flex-col lg:min-w-[440px]">
         <h1 class="uppercase text-4xl text-center mb-3">{props.title}</h1>
         <span class="text-sm">
@@ -476,7 +476,7 @@ export default function CadastroProfessores(props: Props) {
             )}
         </div>
         <ButtonCustom
-          label={isEdit ? "Salvar alterações" : "Cadastrar"}
+          label={isEdit.value ? "Salvar alterações" : "Cadastrar"}
           background="#66F5A7"
           colorText="white"
           action={() => createProf()}

@@ -16,6 +16,7 @@ const token = signal("");
 const historico = signal<Historico[] | null>(null);
 const salas = signal<Sala[] | null>(null);
 const professores = signal<Professor[] | null>(null);
+const loading = signal<boolean>(true);
 
 const state = {
   displayCart,
@@ -26,6 +27,7 @@ const state = {
   historico,
   salas,
   professores,
+  loading,
 };
 
 // Keyboard event listeners

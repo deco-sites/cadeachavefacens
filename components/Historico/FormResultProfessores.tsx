@@ -16,14 +16,19 @@ export default function FormResultProfessores() {
   const valueProfessor = useSignal<ProfessorCPFOrName>({ nome: "", cpf: "" });
   const valueProfessores = useSignal<ProfessorCPFOrName[] | null>(null);
   const selectDivName = useSignal(false);
-  const { professores } = useUI();
+  const { professores, loading } = useUI();
 
   async function ApplyFilter() {
     const cookies = getCookie("token");
+    loading.value = true;
 
     const res = await invoke.site.actions.Professor.getListProfessores({
       token: cookies,
       termo: valueProfessor.value.nome,
+    }).then((r) => {
+      return r;
+    }).finally(() => {
+      loading.value = false;
     });
 
     console.log("res", res);

@@ -20,7 +20,7 @@ export default function CardProfesor(
   { id, nomeProfessor, cpf, salas, ativo }: Props,
 ) {
   return (
-    <div class="rounded-lg shadow-lg w-full h-auto flex flex-col justify-start items-center p-3 gap-2">
+    <div class="rounded-lg shadow-lg w-full h-auto flex flex-col justify-start items-center p-3 gap-2 border-gray-400 border">
       <div class="flex flex-row gap-2 w-full">
         <span class="text-xl font-semibold">Professor:</span>
         <span class="text-xl font-semibold">{nomeProfessor}</span>

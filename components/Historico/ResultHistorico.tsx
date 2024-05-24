@@ -7,8 +7,7 @@ import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
 import Icon from "deco-sites/cadeachavefacens/components/ui/Icon.tsx";
 
 export default function ResultHistorico() {
-  const { token, historico } = useUI();
-  const loading = useSignal<boolean>(true);
+  const { token, historico, loading } = useUI();
 
   async function getHistorico() {
     const cookies = getCookie("token");
@@ -23,8 +22,6 @@ export default function ResultHistorico() {
 
     historico.value = res;
   }
-
-  console.log("historico", historico.value);
 
   useSignalEffect(() => {
     getHistorico();

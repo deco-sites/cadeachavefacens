@@ -28,7 +28,13 @@ const loader = async (props: Props): Promise<Professor[] | null> => {
       "Content-Type": "application/json",
       "Authorization": "Bearer " + props.token,
     },
-  }).then((r) => r.json()).catch((r) => console.error("error", r));
+  }).then((r) => {
+    if (r.ok) {
+      return r.json();
+    } else {
+      return null;
+    }
+  }).catch((r) => console.error("error", r));
 
   if (!response) {
     return null;
@@ -36,8 +42,6 @@ const loader = async (props: Props): Promise<Professor[] | null> => {
 
   const arrayProfessores: Professor[] = [];
   const arraySalas: Sala[] = [];
-
-  console.log("response ", response);
 
   response.content.map((item: Professor) => {
     item.salas.map((sala) => {

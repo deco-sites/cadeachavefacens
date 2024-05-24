@@ -21,7 +21,7 @@ export default function FormResultSalas() {
   const valueSalas = useSignal<Sala[] | null>(null);
   const valueSala = useSignal<Sala>({ nome: "" });
 
-  const { salas } = useUI();
+  const { salas, loading } = useUI();
 
   async function getResponseSalas() {
     const cookies = getCookie("token");
@@ -29,9 +29,10 @@ export default function FormResultSalas() {
     const res = await invoke.site.actions.Professor.getListSala({
       token: cookies,
       termo: valueSala.value.nome,
+    }).then((r) => {
+      return r;
+    }).finally(() => {
     });
-
-    console.log("res", res, valueSala.value.nome);
 
     valueSalas.value = res;
   }
@@ -69,14 +70,13 @@ export default function FormResultSalas() {
   async function ApplyFilter() {
     const cookies = getCookie("token");
 
-    console.log("filtrar", valueSala.value.nome, abriu.value);
+    loading.value = true;
     const res = await invoke.site.actions.Salas.getListSalas({
       token: cookies,
       nome: valueSala.value.nome,
       abriu: abriu.value,
     });
-
-    console.log("res", res);
+    loading.value = false;
 
     salas.value = res;
   }

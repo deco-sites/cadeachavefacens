@@ -8,7 +8,7 @@ export default function FormFiltroSala() {
     <div class="flex w-full h-full justify-center items-center pt-6">
       <div class="grid grid-cols-2 gap-4 max-w-[1200px] w-full">
         <FormResultSalas />
-        <div class="flex flex-col gap-2 col-span-2 col-start-2 ">
+        <div class="flex flex-col gap-2 col-span-2 col-start-2 max-h-[80vh] overflow-y-auto pt-2">
           <ResultSalas />
         </div>
       </div>
