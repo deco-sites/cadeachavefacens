@@ -17,6 +17,7 @@ const historico = signal<Historico[] | null>(null);
 const salas = signal<Sala[] | null>(null);
 const professores = signal<Professor[] | null>(null);
 const loading = signal<boolean>(true);
+const role = signal<"user" | "admin" | "">("");
 
 const state = {
   displayCart,
@@ -28,6 +29,7 @@ const state = {
   salas,
   professores,
   loading,
+  role,
 };
 
 // Keyboard event listeners

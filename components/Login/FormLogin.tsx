@@ -2,7 +2,7 @@ import ButtonCustom from "../Cadastro/ButtonCustom.tsx";
 import { useRef } from "preact/compat";
 import { invoke } from "deco-sites/cadeachavefacens/runtime.ts";
 import { useUI } from "deco-sites/cadeachavefacens/sdk/useUI.ts";
-import { useSignal } from "@preact/signals";
+import { useSignal, useSignalEffect } from "@preact/signals";
 import { setCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
 
 export default function () {
@@ -43,6 +43,7 @@ export default function () {
           console.log("token", res);
           token.value = res;
           setCookie("token", res.token, 0);
+          setCookie("role", res.role, 0);
           window.location.pathname = "/historico";
         }
       }
