@@ -1,0 +1,15 @@
+{
+  "name": "Suporte",
+  "path": "/suporte",
+  "sections": [
+    {
+      "__resolveType": "site/sections/Suporte/Suporte.tsx",
+      "title": "<p>Você não possui acesso nesta pagina</p>",
+      "subTitle": "<p>Procure um administrador para consultar o seu acesso</p>"
+    }
+  ],
+  "seo": {
+    "__resolveType": "website/sections/Seo/SeoV2.tsx"
+  },
+  "__resolveType": "website/pages/Page.tsx"
+}
