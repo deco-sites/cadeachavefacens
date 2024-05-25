@@ -53,8 +53,6 @@ export default function ButtonActiveProfessor({ professor }: Props) {
       id: id,
     });
 
-    console.log("res", res);
-
     active.value = res?.ativo || false;
     professorSignal.value.ativo = res?.ativo || false;
   }

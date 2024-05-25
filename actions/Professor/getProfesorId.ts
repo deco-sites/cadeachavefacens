@@ -39,8 +39,6 @@ const loader = async (props: Props): Promise<User | null> => {
     },
   }).then((r) => r.json()).catch((r) => console.error("error", r));
 
-  console.log("response", response, props);
-
   if (!response) {
     return null;
   }

@@ -20,8 +20,6 @@ const login = async ({ user, password }: Props) => {
     body: JSON.stringify(obj),
   }).then((r) => r.json());
 
-  console.log("Login", response);
-
   return response;
 };
 

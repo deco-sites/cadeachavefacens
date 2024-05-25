@@ -33,8 +33,6 @@ const loader = async (props: Props): Promise<ProfessorCPFOrName[] | null> => {
 
   const arrayProfessores: ProfessorCPFOrName[] = [];
 
-  console.log("response ", response);
-
   response.content.map((item: ProfessorCPFOrName) => {
     arrayProfessores.push({ id: item.id, nome: item.nome, cpf: item.cpf });
   });

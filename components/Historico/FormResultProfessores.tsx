@@ -31,8 +31,6 @@ export default function FormResultProfessores() {
       loading.value = false;
     });
 
-    console.log("res", res);
-
     professores.value = res;
   }
 
@@ -43,8 +41,6 @@ export default function FormResultProfessores() {
       token: cookies,
       termo: valueProfessor.value.nome,
     });
-
-    console.log("res", res);
 
     valueProfessores.value = res;
   }
@@ -87,8 +83,6 @@ export default function FormResultProfessores() {
     const res = await invoke.site.actions.Professor["getListAllProfessores,"]({
       token: cookies,
     });
-
-    console.log("clear");
 
     professores.value = res;
   }

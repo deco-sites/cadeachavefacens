@@ -113,7 +113,6 @@ export default function CadastroSala(props: Props) {
         {(arraySala.value.length > 0) && (
           <div class="flex flex-row gap-2">
             {arraySala.value.map((sala: string) => {
-              console.log("map");
               return (
                 <FlagSala
                   label={sala}

@@ -32,8 +32,6 @@ const loader = async (props: Props): Promise<Sala | null> => {
     body: JSON.stringify(sala),
   }).then((r) => r.json()).catch((r) => console.error("error", r));
 
-  console.log("response", response, sala);
-
   if (!response) {
     return null;
   }

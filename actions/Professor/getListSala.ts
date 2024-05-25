@@ -22,8 +22,6 @@ const loader = async (props: Props): Promise<Sala[] | null> => {
     },
   }).then((r) => r.json()).catch((r) => console.error("error", r));
 
-  console.log("response", response);
-
   if (!response) {
     return null;
   }

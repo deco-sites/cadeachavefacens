@@ -13,8 +13,6 @@ export interface Props {
 }
 
 const loader = async (props: Props): Promise<Sala[] | null> => {
-  console.log("props", props);
-
   const { nome, abriu, ativo } = props;
 
   const arrayCot: string[] = [];
@@ -52,9 +50,7 @@ const loader = async (props: Props): Promise<Sala[] | null> => {
       "Content-Type": "application/json",
       "Authorization": "Bearer " + props.token,
     },
-  }).then((r) => r.json()).catch((r) => console.log("error", r));
-
-  console.log("response", response);
+  }).then((r) => r.json()).catch((r) => console.error("error", r));
 
   if (!response) {
     return null;

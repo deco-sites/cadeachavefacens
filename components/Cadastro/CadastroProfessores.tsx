@@ -115,28 +115,20 @@ export default function CadastroProfessores(props: Props) {
         } else {
           refADMIN.current!.checked = true;
         }
-
-        console.log("professor", professor.value, listClassPost.value);
       } else {
         isEdit.value = false;
       }
     }
-
-    console.log("edit", isEdit.value);
   }
 
   async function getListSalas() {
     const cookies = getCookie("token");
-
-    console.log("foi aq");
 
     const res = await invoke.site.actions.Professor.getListSala({
       token: cookies,
       termo: valueSala.value.nome,
     });
     listSalas.value = res;
-
-    console.log("res", listSalas.value, res);
   }
 
   function addClass(sala: Sala) {
@@ -176,20 +168,14 @@ export default function CadastroProfessores(props: Props) {
     const array = listClassPost.value || [];
     const index = array.findIndex((r) => r.nome == sala.nome);
 
-    console.log("remove", index, array);
-
     // Verifique se o item foi encontrado
     if (index !== undefined) {
       // Remova o item usando o método splice
       array?.splice(index, 1);
-    } else {
-      console.log("Item não encontrado no array.");
     }
 
     listClassPost.value = [];
     listClassPost.value = array;
-
-    console.log("new Array", listClassPost.value, array);
   }
 
   function postProfessor() {
@@ -222,21 +208,11 @@ export default function CadastroProfessores(props: Props) {
       validateConfirmSenha.value = false;
     }
 
-    console.log(
-      "validate",
-      !isEdit.value,
-      refCPF.current?.value,
-      refName.current?.value,
-      refConfirSenha.current?.value,
-    );
-
     if (
       !isEdit.value &&
       refCPF.current?.value && refName.current?.value &&
       refConfirSenha.current?.value
     ) {
-      console.log("validate");
-
       const arrayIndex: number[] | null = [];
 
       if (listClassPost.value && listClassPost.value?.length > 0) {
@@ -258,8 +234,6 @@ export default function CadastroProfessores(props: Props) {
         token: cookies,
         professor: professor,
       });
-
-      console.log("res professor", res);
 
       if (res) {
         const user: User = {
@@ -293,13 +267,10 @@ export default function CadastroProfessores(props: Props) {
           toast.value = false;
         }, 2000);
       }
-
-      console.log("res", res);
     } else if (
       isEdit.value && refCPF.current?.value && refName.current?.value &&
       refConfirSenha.current?.value
     ) {
-      console.log("put");
       const arrayIndex: number[] | null = [];
       if (listClassPost.value && listClassPost.value?.length > 0) {
         listClassPost.value.map((index) => {

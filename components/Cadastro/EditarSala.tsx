@@ -30,8 +30,6 @@ export default function EditarSala(props: Props) {
     const pathSearch = "editar-sala/";
     const cookies = getCookie("token");
 
-    console.log("page", path);
-
     if (path.includes(pathSearch)) {
       // Encontre a posição da string desejada
       const position = path.indexOf(pathSearch);
@@ -46,8 +44,6 @@ export default function EditarSala(props: Props) {
           token: cookies,
           id: parseInt(id),
         });
-
-        console.log("sala", res, id);
 
         sala.value = res;
       }
@@ -86,7 +82,6 @@ export default function EditarSala(props: Props) {
 
   useSignalEffect(() => {
     getSala();
-    console.log("carregou");
   });
 
   return (

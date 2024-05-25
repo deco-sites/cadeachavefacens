@@ -20,8 +20,6 @@ const loader = async (props: Props): Promise<number | null> => {
     ativo: props.professor.ativo,
   };
 
-  console.log("profesor", JSON.stringify(professor));
-
   const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -30,8 +28,6 @@ const loader = async (props: Props): Promise<number | null> => {
     },
     body: JSON.stringify(professor),
   }).then((r) => r.json()).catch((r) => console.error("error", r));
-
-  console.log("response", response, props);
 
   if (!response) {
     return null;

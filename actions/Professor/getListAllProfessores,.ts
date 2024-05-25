@@ -36,8 +36,6 @@ const loader = async (props: Props): Promise<Professor[] | null> => {
 
   const arrayProfessores: Professor[] = [];
 
-  console.log("response ", response);
-
   response.content.map((item: Professor) => {
     const arraySalas: Sala[] = [];
     item.salas.map((sala) => {

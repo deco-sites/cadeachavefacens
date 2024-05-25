@@ -29,8 +29,6 @@ const loader = async (props: Props): Promise<boolean> => {
     return r;
   });
 
-  console.log("responseSala", response);
-
   return response.ok;
 };
 

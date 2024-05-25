@@ -38,8 +38,6 @@ export default function FormResultSalas() {
   }
 
   function SelectOption(value: string, id: number) {
-    console.log("select", value);
-
     valueSala.value.nome = value;
     valueSala.value.id = id;
     selectDivSalas.value = false;

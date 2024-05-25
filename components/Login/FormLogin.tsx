@@ -40,7 +40,6 @@ export default function () {
         if (res.message) {
           alert("Usuario ou senha incorretos");
         } else {
-          console.log("token", res);
           token.value = res;
           setCookie("token", res.token, 0);
           setCookie("role", res.role, 0);
