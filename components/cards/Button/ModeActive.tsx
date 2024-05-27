@@ -3,6 +3,8 @@ import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
 import { invoke } from "deco-sites/cadeachavefacens/runtime.ts";
 import { useSignal } from "@preact/signals";
 import { identity } from "deco/utils/object.ts";
+import ModalConfirm from "deco-sites/cadeachavefacens/components/Modal/ModalConfirm.tsx";
+import Loading from "deco-sites/cadeachavefacens/components/Modal/Loading.tsx";
 
 export interface Props {
   id: number;
@@ -19,6 +21,9 @@ interface Sala {
 }
 
 export default function ButtonActive({ id, ativo, aberto, nome }: Props) {
+  const modal = useSignal<boolean>(false);
+  const modalstatus = useSignal<"loading" | null>(null);
+
   const sala = useSignal<Sala>({
     id: id,
     ativo: ativo,
@@ -28,6 +33,7 @@ export default function ButtonActive({ id, ativo, aberto, nome }: Props) {
   const active = useSignal(ativo);
 
   async function putSala(salaO: Sala) {
+    modalstatus.value = "loading";
     const { id, ativo, aberta, nome } = salaO;
     const cookies = getCookie("token");
 
@@ -37,6 +43,11 @@ export default function ButtonActive({ id, ativo, aberto, nome }: Props) {
       ativo: !ativo,
       aberto: aberta,
       nome: nome,
+    }).then((r) => {
+      return r;
+    }).finally(() => {
+      modalstatus.value = null;
+      modal.value = false;
     });
 
     active.value = res?.ativo || false;
@@ -44,14 +55,28 @@ export default function ButtonActive({ id, ativo, aberto, nome }: Props) {
   }
 
   return (
-    <button
-      class=" font-semibold px-1 py-1 rounded-lg text-white cursor-pointer"
-      style={{ background: active.value ? "#FF0000" : "#7ffc36" }}
-      onClick={() => putSala(sala.value)}
-    >
-      {active.value
-        ? <Icon id="Ban" size={24} />
-        : <Icon id="Check" size={24} />}
-    </button>
+    <>
+      <button
+        class=" font-semibold px-1 py-1 rounded-lg text-white cursor-pointer"
+        style={{ background: active.value ? "#FF0000" : "#7ffc36" }}
+        onClick={() => modal.value = true}
+      >
+        {active.value
+          ? <Icon id="Ban" size={24} />
+          : <Icon id="Check" size={24} />}
+      </button>
+      {modal.value && modalstatus.value === null &&
+        (
+          <ModalConfirm
+            title={active.value
+              ? "Deseja Desativar a Sala:"
+              : "Deseja Ativar a Sala:"}
+            name={sala.value.nome}
+            buttonYes={() => putSala(sala.value)}
+            buttonNot={() => modal.value = false}
+          />
+        )}
+      {modalstatus.value === "loading" && <Loading />}
+    </>
   );
 }
