@@ -2,7 +2,7 @@ export interface Sala {
   nome: string;
   aberta: boolean;
   ativo: boolean;
-  id?: number;
+  id: number;
 }
 
 export interface Props {
@@ -17,7 +17,7 @@ const loader = async (props: Props): Promise<Sala | null> => {
   const url =
     `https://cadeachave-1715465469308.azurewebsites.net/api/sala/${props.id}`;
 
-  const sala: Sala = {
+  const sala: Omit<Sala, "id"> = {
     nome: props.nome,
     aberta: props.aberto,
     ativo: props.ativo,
@@ -34,7 +34,7 @@ const loader = async (props: Props): Promise<Sala | null> => {
 
   if (!response) {
     return null;
-  }
+  } else if (response.message) return null;
 
   return response;
 };

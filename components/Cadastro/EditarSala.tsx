@@ -62,7 +62,10 @@ export default function EditarSala(props: Props) {
         ativo: sala.value?.ativo,
       });
 
+      console.log("res", res);
+
       if (res) {
+        sala.value = res;
         status.value = true;
         toast.value = true;
       } else {
