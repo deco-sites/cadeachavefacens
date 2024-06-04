@@ -7,6 +7,7 @@ import {
 import { invoke } from "deco-sites/cadeachavefacens/runtime.ts";
 import { useUI } from "deco-sites/cadeachavefacens/sdk/useUI.ts";
 import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
+import * as XLSX from "https://cdn.sheetjs.com/xlsx-0.20.2/package/xlsx.mjs";
 
 export interface Sala {
   nome: string;
@@ -77,6 +78,40 @@ export default function FormResultSalas() {
     loading.value = false;
 
     salas.value = res;
+  }
+
+  async function exportTable() {
+    const cookies = getCookie("token");
+
+    const res = await invoke.site.actions.Salas.getListAllSalas({
+      token: cookies,
+    });
+
+    // Cria uma tabela
+    const data = [
+      ["ID", "Nome", "Ativo", "Aberto"],
+    ];
+
+    if (res) {
+      res.forEach((item) => {
+        data.push([
+          item.id.toString(),
+          item.nome,
+          item.ativo.valueOf().toString(),
+          item.aberta.valueOf().toString(),
+        ]);
+      });
+    }
+
+    //Criar a planilha
+    const ws = XLSX.utils.aoa_to_sheet(data);
+
+    //Criar o arquivo
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Salas");
+
+    //Exportar o arquivo
+    XLSX.writeFile(wb, "Salas.xlsx");
   }
 
   return (
@@ -176,7 +211,10 @@ export default function FormResultSalas() {
         Cadastrar Sala
         <Icon id="Door" size={24} />
       </a>
-      <button class="flex justify-center items-center px-3 py-3 text-white bg-[#185C37] rounded-lg w-full text-xl">
+      <button
+        onClick={() => exportTable()}
+        class="flex justify-center items-center px-3 py-3 text-white bg-[#185C37] rounded-lg w-full text-xl"
+      >
         Gerar Excel
       </button>
     </div>

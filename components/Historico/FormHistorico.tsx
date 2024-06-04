@@ -5,6 +5,7 @@ import { signal, useSignal } from "@preact/signals";
 import { useRef } from "preact/compat";
 import { useUI } from "deco-sites/cadeachavefacens/sdk/useUI.ts";
 import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
+import * as XLSX from "https://cdn.sheetjs.com/xlsx-0.20.2/package/xlsx.mjs";
 
 interface ProfessorCPFOrName {
   id?: number;
@@ -191,6 +192,40 @@ export default function FormHistorico() {
     historico.value = res;
   }
 
+  async function exportTable() {
+    const cookies = getCookie("token");
+
+    const res = await invoke.site.loaders.Historic.ClassHistoric({
+      token: cookies,
+    });
+
+    //Cria uma tabela
+    const data = [
+      ["Sala", "Professor", "Abriu", "Data"],
+    ];
+
+    if (res) {
+      res.forEach((r) => {
+        data.push([
+          r.sala,
+          r.professor,
+          r.aberto.valueOf().toString(),
+          r.horario.valueOf(),
+        ]);
+      });
+    }
+
+    // Criação da planilha
+    const ws = XLSX.utils.aoa_to_sheet(data);
+
+    // Criação do workbook
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Historico");
+
+    //Exporta a planilha
+    XLSX.writeFile(wb, "Historico.xlsx");
+  }
+
   return (
     <form class="flex flex-col gap-2 col-span-1">
       <div class="flex flex-row p-2 shadow-lg gap-2 rounded-lg">
@@ -332,7 +367,11 @@ export default function FormHistorico() {
           <Icon id="Plus" size={24} class="rotate-45" />
         </button>
       </div>
-      <button class="flex justify-center items-center px-3 py-3 text-white bg-[#185C37] rounded-lg w-full text-xl">
+      <button
+        type="button"
+        onClick={() => exportTable()}
+        class="flex justify-center items-center px-3 py-3 text-white bg-[#185C37] rounded-lg w-full text-xl"
+      >
         Gerar Excel
       </button>
     </form>

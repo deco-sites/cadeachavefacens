@@ -5,6 +5,7 @@ import { useUI } from "deco-sites/cadeachavefacens/sdk/useUI.ts";
 import { ChangeEvent } from "https://esm.sh/v128/preact@10.19.6/compat/src/index.js";
 import { invoke } from "deco-sites/cadeachavefacens/runtime.ts";
 import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
+import * as XLSX from "https://cdn.sheetjs.com/xlsx-0.20.2/package/xlsx.mjs";
 
 interface ProfessorCPFOrName {
   id?: number;
@@ -87,6 +88,40 @@ export default function FormResultProfessores() {
     professores.value = res;
   }
 
+  async function exportTable() {
+    const allProfessores = await invoke.site.actions.Professor
+      ["getListAllProfessores,"]({
+        token: getCookie("token"),
+      });
+
+    // Dados a serem exportados
+    // Converte os dados para o formato de array de arrays
+    const data = [
+      ["ID", "Nome", "CPF", "Ativo", "Salas"],
+    ];
+
+    allProfessores!.forEach((pessoa) => {
+      const salas = pessoa.salas.map((sala) => sala.nome).join(", ");
+      data.push([
+        pessoa.id.toString(),
+        pessoa.nome,
+        pessoa.cpf,
+        pessoa.ativo.valueOf().toString(),
+        salas,
+      ]);
+    });
+
+    // Criação da planilha
+    const ws = XLSX.utils.aoa_to_sheet(data);
+
+    // Criação do workbook
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Professores");
+
+    // Exportar a planilha
+    XLSX.writeFile(wb, "Professores.xlsx");
+  }
+
   return (
     <div class="flex flex-col gap-2 col-span-1">
       <div class="flex flex-col p-2 shadow-lg gap-2 rounded-lg relative">
@@ -137,7 +172,10 @@ export default function FormResultProfessores() {
         Cadastrar Professores
         <Icon id="PlusOctagon" size={24} />
       </a>
-      <button class="flex justify-center items-center px-3 py-3 text-white bg-[#185C37] rounded-lg w-full text-xl">
+      <button
+        onClick={() => exportTable()}
+        class="flex justify-center items-center px-3 py-3 text-white bg-[#185C37] rounded-lg w-full text-xl"
+      >
         Gerar Excel
       </button>
     </div>
