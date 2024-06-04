@@ -78,6 +78,9 @@ export default function CadastroProfessores(props: Props) {
   const toast = useSignal<boolean>(false);
   const status = useSignal<boolean>(false);
 
+  const visiblePassword = useSignal<boolean>(false);
+  const confirmPassword = useSignal<boolean>(false);
+
   const isEdit = useSignal(false);
 
   function ExitInput() {
@@ -133,6 +136,10 @@ export default function CadastroProfessores(props: Props) {
 
   function addClass(sala: Sala) {
     const array: Sala[] = [];
+
+    if (listClassPost.value?.find((r) => r.nome === sala.nome)) {
+      return;
+    }
 
     listClassPost.value?.map((item) => {
       array.push({
@@ -370,13 +377,23 @@ export default function CadastroProfessores(props: Props) {
         <span class="text-sm">
           {props.inputPassword}
         </span>
-        <input
-          type={"text"}
-          ref={refSenha}
-          class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
-        >
-        </input>
-        {validateCPF.value && (
+        <div class="flex flex-row gap-2 bg-[#EAEAEA] rounded-lg px-2">
+          <input
+            type={visiblePassword.value ? "text" : "password"}
+            ref={refSenha}
+            class="outline-none bg-[#EAEAEA] h-10 w-full"
+          >
+          </input>
+          <button
+            onClick={() => visiblePassword.value = !visiblePassword.value}
+            class="h-full w-7 flex justify-center items-center"
+          >
+            {!visiblePassword.value
+              ? <Icon id="Eye" size={24} />
+              : <Icon id="EyeOff" size={24} />}
+          </button>
+        </div>
+        {validateSenha.value && (
           <span class="text-xs text-red-600">
             Preencha o campo corretamente*
           </span>
@@ -384,12 +401,22 @@ export default function CadastroProfessores(props: Props) {
         <span class="text-sm">
           {props.inputConfirmePassword}
         </span>
-        <input
-          type={"text"}
-          ref={refConfirSenha}
-          class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
-        >
-        </input>
+        <div class="flex flex-row gap-2 bg-[#EAEAEA] rounded-lg px-2">
+          <input
+            type={confirmPassword.value ? "text" : "password"}
+            ref={refConfirSenha}
+            class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
+          >
+          </input>
+          <button
+            onClick={() => confirmPassword.value = !confirmPassword.value}
+            class="h-full w-7 flex justify-center items-center"
+          >
+            {!confirmPassword.value
+              ? <Icon id="Eye" size={24} />
+              : <Icon id="EyeOff" size={24} />}
+          </button>
+        </div>
         {validateConfirmSenha.value && (
           <span class="text-xs text-red-600">As senhas estão incorretas*</span>
         )}

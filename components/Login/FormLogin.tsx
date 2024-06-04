@@ -4,6 +4,7 @@ import { invoke } from "deco-sites/cadeachavefacens/runtime.ts";
 import { useUI } from "deco-sites/cadeachavefacens/sdk/useUI.ts";
 import { useSignal, useSignalEffect } from "@preact/signals";
 import { setCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
+import Icon from "deco-sites/cadeachavefacens/components/ui/Icon.tsx";
 
 export default function () {
   const user = useRef<HTMLInputElement>(null);
@@ -11,6 +12,8 @@ export default function () {
 
   const inputUser = useSignal<boolean>(true);
   const inputPassword = useSignal<boolean>(true);
+
+  const visiblePassword = useSignal<boolean>(false);
 
   const { token } = useUI();
 
@@ -58,7 +61,7 @@ export default function () {
         type={"text"}
         name={"usuario"}
         ref={user}
-        class=" rounded-lg border border-white w-full px-3 py-2 bg-[#ffffff9c]"
+        class=" rounded-lg border border-white w-full px-3 py-2 bg-[#ffffff9c] outline-none"
       >
       </input>
       {!inputUser.value && (
@@ -69,12 +72,23 @@ export default function () {
       <label class="text-white ">
         Senha:
       </label>
-      <input
-        type={"password"}
-        ref={password}
-        class=" rounded-lg border border-white w-full px-3 py-2 bg-[#ffffff9c]"
-      >
-      </input>
+      <div class="flex flex-row gap-2 bg-[#ffffff9c] border-white rounded-lg px-3 justify-center items-center">
+        <input
+          type={visiblePassword.value ? "text" : "password"}
+          ref={password}
+          class=" rounded-lg w-full py-2 bg-transparent outline-none "
+        >
+        </input>
+        <button
+          type="button"
+          onClick={() => visiblePassword.value = !visiblePassword.value}
+          class="h-full w-7 flex justify-center items-center"
+        >
+          {!visiblePassword.value
+            ? <Icon id="Eye" size={24} />
+            : <Icon id="EyeOff" size={24} />}
+        </button>
+      </div>
       {!inputPassword.value && (
         <span class="text-xs text-red-600">Preencha senha corretamente *</span>
       )}
