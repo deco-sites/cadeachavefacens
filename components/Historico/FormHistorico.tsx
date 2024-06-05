@@ -6,7 +6,6 @@ import { useRef } from "preact/compat";
 import { useUI } from "deco-sites/cadeachavefacens/sdk/useUI.ts";
 import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
 import * as XLSX from "https://cdn.sheetjs.com/xlsx-0.20.2/package/xlsx.mjs";
-
 interface ProfessorCPFOrName {
   id?: number;
   nome: string;
@@ -30,7 +29,7 @@ export default function FormHistorico() {
   const inputAbriu = useRef<HTMLInputElement>(null);
   const inputFechado = useRef<HTMLInputElement>(null);
   const abriu = useSignal<boolean | undefined>(undefined);
-  const { historico, loading } = useUI();
+  const { historico, loading, filter } = useUI();
 
   const date = new Date();
 
@@ -79,6 +78,15 @@ export default function FormHistorico() {
     const iDate = formatarDataParaDate(initialDate.current!.value);
     const fDate = formatarDataParaDate(finalDate.current!.value);
 
+    filter.value = {
+      professorId: valueProfessor.value?.id,
+      salaId: valueSala.value?.id,
+      abriu: abriu.value,
+      dataFinal: fDate,
+      dataInicial: iDate,
+      totalElements: historico.value?.totalElements,
+    };
+
     const res = await invoke.site.actions.Historico({
       token: cookies,
       professorId: valueProfessor.value?.id,
@@ -106,6 +114,14 @@ export default function FormHistorico() {
 
   const currentDateIput = formatarDataParaInput(date);
   const beforeDateinput = formatarDataParaInput(beforeDate);
+
+  const IDate = formatarDataParaDate(currentDateIput);
+  const FDate = formatarDataParaDate(beforeDateinput);
+
+  filter.value = {
+    dataFinal: IDate,
+    dataInicial: FDate,
+  };
 
   async function getResponseProfessores() {
     const cookies = getCookie("token");
@@ -195,8 +211,15 @@ export default function FormHistorico() {
   async function exportTable() {
     const cookies = getCookie("token");
 
-    const res = await invoke.site.loaders.Historic.ClassHistoric({
+    const res = await invoke.site.actions.Historico({
       token: cookies,
+      professorId: filter.value?.professorId,
+      salaId: filter.value?.salaId,
+      dataFinal: filter.value?.dataFinal,
+      dataInicial: filter.value?.dataInicial,
+      abriu: filter.value?.abriu,
+      page: 0,
+      totalElements: historico.value?.totalElements ?? 15,
     });
 
     //Cria uma tabela
@@ -205,7 +228,7 @@ export default function FormHistorico() {
     ];
 
     if (res) {
-      res.forEach((r) => {
+      res.historico.forEach((r) => {
         data.push([
           r.sala,
           r.professor,

@@ -6,6 +6,47 @@ import { effect, useSignal, useSignalEffect } from "@preact/signals";
 import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
 import Icon from "deco-sites/cadeachavefacens/components/ui/Icon.tsx";
 
+const pagination = () => {
+  const { historico } = useUI();
+
+  const array = Array.from(
+    { length: historico.value?.totalPage || 0 },
+    (_, index) => index,
+  );
+
+  async function changePage(number: number) {
+    const cookies = getCookie("token");
+    const { filter, historico } = useUI();
+    console.log(filter.value);
+    const res = await invoke.site.actions.Historico({
+      token: cookies,
+      page: number,
+      professorId: filter.value?.professorId,
+      salaId: filter.value?.salaId,
+      abriu: filter.value?.abriu,
+      dataInicial: filter.value?.dataInicial,
+      dataFinal: filter.value?.dataFinal,
+    });
+
+    historico.value = res;
+    console.log("page", historico.value?.number);
+  }
+
+  return (
+    <>
+      {array.map((item, index) => (
+        <li
+          onClick={() => changePage(index)}
+          class={`bg-[#1f70b8] ${
+            index === historico.value?.number ? "opacity-80" : ""
+          } text-white font-semibold w-10 h-10 rounded-md flex justify-center items-center cursor-pointer`}
+        >
+          <span>{index + 1}</span>
+        </li>
+      ))}
+    </>
+  );
+};
 export default function ResultHistorico() {
   const { token, historico, loading } = useUI();
 
@@ -41,8 +82,8 @@ export default function ResultHistorico() {
         )
         : (
           <>
-            {historico.value && historico.value?.length > 0
-              ? historico.value.map((item: Historico) => (
+            {historico.value && historico.value.historico.length > 0
+              ? historico.value.historico.map((item: Historico) => (
                 <CardHistorico
                   professor={item.professor}
                   aberto={item.aberto}
@@ -62,6 +103,11 @@ export default function ResultHistorico() {
                   </span>
                 </div>
               )}
+            {historico.value?.totalPage && (
+              <ul class="w-full flex gap-2 flex-row justify-center">
+                {pagination()}
+              </ul>
+            )}
           </>
         )}
     </>

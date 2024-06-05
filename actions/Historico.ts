@@ -5,6 +5,8 @@ export interface Props {
   professorId?: number;
   salaId?: number;
   abriu?: boolean;
+  page?: number;
+  totalElements?: number;
 }
 
 export interface Historico {
@@ -14,8 +16,15 @@ export interface Historico {
   aberto: boolean;
 }
 
-const loader = async (props: Props): Promise<Historico[] | null> => {
-  const { professorId, salaId, abriu } = props;
+export interface Response {
+  totalPage: number;
+  number: number;
+  totalElements?: number;
+  historico: Array<Historico>;
+}
+
+const loader = async (props: Props): Promise<Response | null> => {
+  const { professorId, salaId, abriu, page, totalElements } = props;
 
   const arrayCot: string[] = [];
 
@@ -31,6 +40,12 @@ const loader = async (props: Props): Promise<Historico[] | null> => {
   if (!abriu && abriu != undefined) {
     arrayCot.push(`abriu=${abriu}`);
   }
+  if (page) {
+    arrayCot.push(`page=${page}`);
+  }
+  if (totalElements) {
+    arrayCot.push(`size=${totalElements}`);
+  }
 
   let stringUrl = "";
 
@@ -41,8 +56,9 @@ const loader = async (props: Props): Promise<Historico[] | null> => {
   });
 
   const url =
-    `https://cadeachave-1715465469308.azurewebsites.net/api/historico/filtro/${props.dataInicial}/${props.dataFinal} + ${stringUrl}`;
+    `https://cadeachave-1715465469308.azurewebsites.net/api/historico/filtro/${props.dataInicial}/${props.dataFinal}${stringUrl}`;
 
+  console.log("props", props, url);
   const response = await fetch(url, {
     method: "GET",
     headers: {
@@ -54,6 +70,8 @@ const loader = async (props: Props): Promise<Historico[] | null> => {
   if (!response) {
     return null;
   }
+
+  console.log("response", response);
 
   const arrayHistorico: Historico[] = [];
 
@@ -67,7 +85,14 @@ const loader = async (props: Props): Promise<Historico[] | null> => {
     });
   });
 
-  return arrayHistorico;
+  const data: Response = {
+    totalPage: response.totalPages,
+    number: response.number,
+    historico: arrayHistorico,
+    totalElements: response.totalElements,
+  };
+
+  return data;
 };
 
 export default loader;

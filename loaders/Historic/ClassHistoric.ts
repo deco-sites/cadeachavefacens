@@ -8,8 +8,14 @@ export interface Historico {
   horario: string;
   aberto: boolean;
 }
+export interface Response {
+  totalPage: number;
+  number: number;
+  totalElements?: number;
+  historico: Array<Historico>;
+}
 
-const loader = async (props: Props): Promise<Historico[] | null> => {
+const loader = async (props: Props): Promise<Response | null> => {
   const url =
     "https://cadeachave-1715465469308.azurewebsites.net/api/historico";
 
@@ -37,7 +43,14 @@ const loader = async (props: Props): Promise<Historico[] | null> => {
     });
   });
 
-  return arrayHistoric;
+  const data: Response = {
+    totalPage: response.totalPages,
+    number: response.number,
+    historico: arrayHistoric,
+    totalElements: response.totalElements,
+  };
+
+  return data;
 };
 
 export default loader;

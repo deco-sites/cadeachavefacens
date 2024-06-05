@@ -4,20 +4,30 @@
  */
 
 import { signal } from "@preact/signals";
-import { Historico } from "deco-sites/cadeachavefacens/loaders/Historic/ClassHistoric.ts";
+import { Response } from "deco-sites/cadeachavefacens/loaders/Historic/ClassHistoric.ts";
 import { Sala } from "deco-sites/cadeachavefacens/actions/Salas/getListSalas.ts";
 import { Professor } from "deco-sites/cadeachavefacens/actions/Professor/getListProfessores.ts";
+
+interface Filter {
+  professorId?: number;
+  salaId?: number;
+  abriu?: boolean;
+  dataInicial: string;
+  dataFinal: string;
+  totalElements?: number;
+}
 
 const displayCart = signal(false);
 const displayMenu = signal(false);
 const displaySearchPopup = signal(false);
 const displaySearchDrawer = signal(false);
 const token = signal("");
-const historico = signal<Historico[] | null>(null);
+const historico = signal<Response | null>(null);
 const salas = signal<Sala[] | null>(null);
 const professores = signal<Professor[] | null>(null);
 const loading = signal<boolean>(true);
 const role = signal<"user" | "admin" | "">("");
+const filter = signal<Filter | null>(null);
 
 const state = {
   displayCart,
@@ -30,6 +40,7 @@ const state = {
   professores,
   loading,
   role,
+  filter,
 };
 
 // Keyboard event listeners
