@@ -29,6 +29,8 @@ const loader = async (props: Props): Promise<number | null> => {
     body: JSON.stringify(professor),
   }).then((r) => r.json()).catch((r) => console.error("error", r));
 
+  console.log(response);
+
   if (!response) {
     return null;
   }

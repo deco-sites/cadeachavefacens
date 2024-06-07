@@ -185,12 +185,6 @@ export default function CadastroProfessores(props: Props) {
     listClassPost.value = array;
   }
 
-  function postProfessor() {
-    const cookies = getCookie("token");
-
-    // const resProfessor = invoke.site.actions.Professor.postProfessor({ token: cookies, professor:})
-  }
-
   async function createProf() {
     const cookies = getCookie("token");
 
@@ -330,6 +324,57 @@ export default function CadastroProfessores(props: Props) {
     }
   }
 
+  function formatCPF() {
+    const value = refCPF.current?.value;
+    if (value && refCPF.current) {
+      refCPF.current.value = value
+        .replace(/\D/g, "")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d{1,2})/, "$1-$2")
+        .replace(/(-\d{2})\d+?$/, "$1");
+    } else {
+      validateCPF.value = true;
+    }
+  }
+
+  function verifyCPF() {
+    const value = refCPF.current?.value;
+    if (value && refCPF.current) {
+      const cpf = value.replace(/[^\d]+/g, "");
+
+      if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+        validateCPF.value = true;
+      }
+
+      let soma = 0;
+      let resto;
+
+      // Valida o primeiro dígito verificador
+      for (let i = 1; i <= 9; i++) {
+        soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+      }
+      resto = (soma * 10) % 11;
+      if (resto === 10 || resto === 11) resto = 0;
+      if (resto !== parseInt(cpf.substring(9, 10))) {
+        validateCPF.value = true;
+      }
+
+      soma = 0;
+
+      // Valida o segundo dígito verificador
+      for (let i = 1; i <= 10; i++) {
+        soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+      }
+      resto = (soma * 10) % 11;
+      if (resto === 10 || resto === 11) resto = 0;
+      if (resto !== parseInt(cpf.substring(10, 11))) {
+        validateCPF.value = true;
+      } else {
+        validateCPF.value = false;
+      }
+    }
+  }
   useSignalEffect(() => {
     getProfessor();
   });
@@ -366,12 +411,14 @@ export default function CadastroProfessores(props: Props) {
           type={"text"}
           value={professor.value?.professor.cpf}
           ref={refCPF}
+          onInput={formatCPF}
+          onChange={verifyCPF}
           class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
         >
         </input>
         {validateCPF.value && (
           <span class="text-xs text-red-600">
-            Preencha o campo corretamente*
+            Preencha o campo com um cpf valido*
           </span>
         )}
         <span class="text-sm">
@@ -438,6 +485,7 @@ export default function CadastroProfessores(props: Props) {
             id="USER"
             name="ROLE"
             value="USER"
+            checked
           />
           <label for="USER">USER</label>
         </div>
