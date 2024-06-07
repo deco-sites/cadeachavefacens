@@ -175,7 +175,6 @@ export default function FormResultSalas() {
               name="status"
               value="Fechado"
               class="hidden peer"
-              checked
               ref={inputFechado}
               onClick={() => {
                 abriu.value = false;

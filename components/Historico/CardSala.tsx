@@ -1,5 +1,6 @@
 import ButtonActive from "deco-sites/cadeachavefacens/islands/Button/ModeActive.tsx";
 import Icon from "../ui/Icon.tsx";
+import ButtonMQTT from "deco-sites/cadeachavefacens/islands/Button/ButtonMQTT.tsx";
 
 export interface Sala {
   nome: string;
@@ -37,9 +38,7 @@ export default function CardSala({ nome, aberta, id, ativo }: Sala) {
           <Icon id="Edit" size={24} />
         </a>
         <ButtonActive id={id} ativo={ativo} nome={nome} aberto={aberta} />
-        <button class="text-black font-semibold px-2 py-1 rounded-lg bg-[#A8A8A8]">
-          Fechar Remoto
-        </button>
+        <ButtonMQTT id={id} isOpen={aberta} />
       </div>
     </div>
   );
