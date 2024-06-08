@@ -57,7 +57,9 @@ export type AvailableIcons =
   | "Confuzer"
   | "NoAccess"
   | "Eye"
-  | "EyeOff";
+  | "EyeOff"
+  | "arrowRight"
+  | "arrowLeft";
 
 interface Props extends JSX.SVGAttributes<SVGSVGElement> {
   /**

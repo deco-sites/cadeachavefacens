@@ -5,9 +5,10 @@ import { Historico } from "deco-sites/cadeachavefacens/loaders/Historic/ClassHis
 import { effect, useSignal, useSignalEffect } from "@preact/signals";
 import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
 import Icon from "deco-sites/cadeachavefacens/components/ui/Icon.tsx";
+import Loading from "deco-sites/cadeachavefacens/components/Modal/Loading.tsx";
 
 const pagination = () => {
-  const { historico } = useUI();
+  const { historico, loading, filter } = useUI();
 
   const array = Array.from(
     { length: historico.value?.totalPage || 0 },
@@ -15,9 +16,9 @@ const pagination = () => {
   );
 
   async function changePage(number: number) {
+    loading.value = true;
+
     const cookies = getCookie("token");
-    const { filter, historico } = useUI();
-    console.log(filter.value);
     const res = await invoke.site.actions.Historico({
       token: cookies,
       page: number,
@@ -26,27 +27,67 @@ const pagination = () => {
       abriu: filter.value?.abriu,
       dataInicial: filter.value?.dataInicial,
       dataFinal: filter.value?.dataFinal,
+    }).then((r) => {
+      return r;
+    }).finally(() => {
+      loading.value = false;
     });
 
     historico.value = res;
-    console.log("page", historico.value?.number);
   }
 
   return (
-    <>
-      {array.map((item, index) => (
-        <li
-          onClick={() => changePage(index)}
-          class={`bg-[#1f70b8] ${
-            index === historico.value?.number ? "opacity-80" : ""
-          } text-white font-semibold w-10 h-10 rounded-md flex justify-center items-center cursor-pointer`}
-        >
-          <span>{index + 1}</span>
-        </li>
+    <div class="flex justify-center items-center gap-2">
+      <button
+        class="text-white font-semibold w-10 h-10 rounded-md flex justify-center items-center cursor-pointer bg-[#1f70b8] disabled:opacity-70 disabled:cursor-default mr-4"
+        disabled={historico.value?.number == 0}
+        onClick={() => {
+          if (historico.value && historico.value?.number > 0) {
+            changePage(historico.value.number - 1);
+          }
+        }}
+      >
+        <Icon size={24} id="arrowLeft" strokeWidth={3} class="text-white" />
+      </button>
+      {array.map((number) => (
+        <>
+          {number === 3 && historico.value!.number > 5
+            ? <span>. . .</span>
+            : number > 2 && number < array.length - 2
+            ? null
+            : number < array.length - 1 && number > 2 &&
+                historico.value!.number < array.length - 1
+            ? <span>. . .</span>
+            : (
+              <li
+                onClick={() => changePage(number)}
+                class={`bg-[#1f70b8] ${
+                  number === historico.value?.number ? "opacity-80" : ""
+                } text-white font-semibold w-10 h-10 rounded-md flex justify-center items-center cursor-pointer`}
+              >
+                <span>{number + 1}</span>
+              </li>
+            )}
+        </>
       ))}
-    </>
+      <button
+        class="text-white font-semibold w-10 h-10 rounded-md flex justify-center items-center cursor-pointer bg-[#1f70b8] disabled:opacity-70 disabled:cursor-default ml-4"
+        disabled={historico.value?.number == (historico.value!.totalPage - 1)}
+        onClick={() => {
+          if (
+            historico.value &&
+            historico.value.number < historico.value.totalPage
+          ) {
+            changePage(historico.value.number + 1);
+          }
+        }}
+      >
+        <Icon size={24} id="arrowRight" strokeWidth={3} class="text-white" />
+      </button>
+    </div>
   );
 };
+
 export default function ResultHistorico() {
   const { token, historico, loading } = useUI();
 
