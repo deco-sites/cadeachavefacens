@@ -50,8 +50,10 @@ export default function ButtonActive({ id, ativo, aberto, nome }: Props) {
       modal.value = false;
     });
 
-    active.value = res?.ativo || false;
-    sala.value.ativo = res?.ativo || false;
+    if (res && typeof res === "object") {
+      active.value = res?.ativo || false;
+      sala.value.ativo = res?.ativo || false;
+    }
   }
 
   return (

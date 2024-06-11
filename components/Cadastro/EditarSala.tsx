@@ -4,6 +4,7 @@ import ButtonCustom from "deco-sites/cadeachavefacens/components/Cadastro/Button
 import { invoke } from "deco-sites/cadeachavefacens/runtime.ts";
 import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
 import FlagStatus from "deco-sites/cadeachavefacens/components/Flags/FlagStatus.tsx";
+import Loading from "deco-sites/cadeachavefacens/components/Modal/Loading.tsx";
 
 export interface Props {
   title: string;
@@ -24,6 +25,10 @@ export default function EditarSala(props: Props) {
   const sala = useSignal<Sala | null>(null);
   const toast = useSignal<boolean>(false);
   const status = useSignal<boolean>(false);
+
+  const message = useSignal<string>("Falha. Tente novamente mais tarde");
+
+  const loading = useSignal<"loading" | null>(null);
 
   async function getSala() {
     const path = globalThis.window.location.pathname;
@@ -53,6 +58,8 @@ export default function EditarSala(props: Props) {
   async function putSala() {
     const cookies = getCookie("token");
 
+    loading.value = "loading";
+
     if (refInput.current?.value) {
       const res = await invoke.site.actions.Salas.putSala({
         token: cookies,
@@ -60,19 +67,30 @@ export default function EditarSala(props: Props) {
         id: sala.value?.id,
         aberto: sala.value?.aberta,
         ativo: sala.value?.ativo,
+      }).then((r) => {
+        console.log("return", r);
+        return r;
+      }).finally(() => {
+        loading.value = null;
       });
 
-      if (res) {
+      if (res && typeof res === "object") {
         sala.value = res;
         status.value = true;
         toast.value = true;
       } else {
         status.value = false;
+        message.value = res || "Falha. Tente novamente mais tarde";
       }
       toast.value = true;
 
       setTimeout(() => {
         toast.value = false;
+        if (status.value) {
+          setTimeout(() => {
+            window.location.pathname = "/historico-salas";
+          }, 500);
+        }
       }, 2000);
 
       validadeInput.value = false;
@@ -86,40 +104,43 @@ export default function EditarSala(props: Props) {
   });
 
   return (
-    <div class="w-full h-full flex justify-center pt-8 overflow-x-hidden relative pb-6">
-      <FlagStatus
-        show={toast.value}
-        status={status.value}
-        successLabel="Sala Editada com Sucesso"
-        errorLabel="Falha. Tente novamente mais tarde"
-      />
-      <div class="rounded-2xl border shadow-xl p-2 gap-4 flex flex-col lg:min-w-[440px]">
-        <h1 class="uppercase text-4xl text-center">{props.title}</h1>
-        <span class="text-sm">
-          {props.input}
-        </span>
-        <span class="hidden">{teste.value}</span>
-        <div class="flex flex-row h-10 w-full rounded-lg bg-[#EAEAEA]">
-          <input
-            type={"text"}
-            ref={refInput}
-            value={sala.value?.nome}
-            class="outline-none bg-[#EAEAEA] h-10 w-full rounded-l-lg px-2"
-          >
-          </input>
-          {validadeInput.value && (
-            <span class="text-xs text-red-600">
-              Preencha o campo corretamente*
-            </span>
-          )}
-        </div>
-        <ButtonCustom
-          label="Salvar"
-          background="#FFA800"
-          colorText="white"
-          action={() => putSala()}
+    <>
+      <div class="w-full h-full flex justify-center pt-8 overflow-x-hidden relative pb-6">
+        <FlagStatus
+          show={toast.value}
+          status={status.value}
+          successLabel="Sala Editada com Sucesso"
+          errorLabel={message.value}
         />
+        <div class="rounded-2xl border shadow-xl p-2 gap-4 flex flex-col lg:min-w-[440px]">
+          <h1 class="uppercase text-4xl text-center">{props.title}</h1>
+          <span class="text-sm">
+            {props.input}
+          </span>
+          <span class="hidden">{teste.value}</span>
+          <div class="flex flex-row h-10 w-full rounded-lg bg-[#EAEAEA]">
+            <input
+              type={"text"}
+              ref={refInput}
+              value={sala.value?.nome}
+              class="outline-none bg-[#EAEAEA] h-10 w-full rounded-l-lg px-2"
+            >
+            </input>
+            {validadeInput.value && (
+              <span class="text-xs text-red-600">
+                Preencha o campo corretamente*
+              </span>
+            )}
+          </div>
+          <ButtonCustom
+            label="Salvar"
+            background="#FFA800"
+            colorText="white"
+            action={() => putSala()}
+          />
+        </div>
       </div>
-    </div>
+      {loading.value === "loading" && <Loading />}
+    </>
   );
 }

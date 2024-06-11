@@ -20,12 +20,12 @@ export default function CardSala({ nome, aberta, id, ativo }: Sala) {
         <span class="text-lg font-semibold">Status:</span>
         {aberta
           ? (
-            <button class="text-black font-semibold px-2 py-1 rounded-lg bg-[#66F5A7] cursor-none">
+            <button class="text-black font-semibold px-2 py-1 rounded-lg bg-[#66F5A7] cursor-default">
               Aberto
             </button>
           )
           : (
-            <button class="text-black font-semibold px-2 py-1 rounded-lg bg-[#FF0000] cursor-none">
+            <button class="text-black font-semibold px-2 py-1 rounded-lg bg-[#FF0000] cursor-default">
               Fechado
             </button>
           )}
