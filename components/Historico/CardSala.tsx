@@ -38,7 +38,7 @@ export default function CardSala({ nome, aberta, id, ativo }: Sala) {
           <Icon id="Edit" size={24} />
         </a>
         <ButtonActive id={id} ativo={ativo} nome={nome} aberto={aberta} />
-        <ButtonMQTT id={id} isOpen={aberta} />
+        <ButtonMQTT nome={nome} isOpen={aberta} />
       </div>
     </div>
   );

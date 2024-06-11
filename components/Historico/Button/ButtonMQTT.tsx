@@ -1,15 +1,23 @@
 import { Client } from "https://deno.land/x/mqtt@0.1.2/deno/mod.ts";
+import { useSignal } from "@preact/signals";
+import ModalConfirm from "deco-sites/cadeachavefacens/components/Modal/ModalConfirm.tsx";
+import Loading from "deco-sites/cadeachavefacens/components/Modal/Loading.tsx";
 
 export interface Props {
   isOpen?: boolean;
-  id: number;
+  nome: string;
 }
 
-export default function ButtonMQTT({ isOpen, id }: Props) {
+export default function ButtonMQTT({ isOpen, nome }: Props) {
+  const modal = useSignal<boolean>(false);
+  const modalstatus = useSignal<"loading" | null>(null);
+
   function ButtonActiveMQTT() {
+    modal.value = false;
+    // modalstatus.value = "loading"
     // Configurações do broker MQTT
     const mqtt_broker = "wss://test.mosquitto.org:8081"; // Websocket para comunicação segura
-    const topic = `CADEACHAVE/SALA/${id}`;
+    const topic = `CADEACHAVE/SALA/${nome}`;
 
     // Cria um cliente MQTT
     const client = new Client({ url: mqtt_broker });
@@ -21,6 +29,7 @@ export default function ButtonMQTT({ isOpen, id }: Props) {
       client.publish(topic, "1");
       // Desconecta do broker após enviar a mensagem
       client.disconnect();
+      // modalstatus.value = null
     });
 
     // Callback chamado quando ocorre um erro de conexão
@@ -35,20 +44,34 @@ export default function ButtonMQTT({ isOpen, id }: Props) {
       {isOpen
         ? (
           <button
-            onClick={() => ButtonActiveMQTT()}
             class="text-black font-semibold px-2 py-1 rounded-lg bg-[#ec6666]"
+            onClick={() => {
+              modal.value = true;
+            }}
           >
             Fechar Remoto
           </button>
         )
         : (
           <button
-            onClick={() => ButtonActiveMQTT()}
             class="text-black font-semibold px-2 py-1 rounded-lg bg-[#58cd68]"
+            onClick={() => {
+              modal.value = true;
+            }}
           >
             Abrir Remoto
           </button>
         )}
+      {modal.value && modalstatus.value === null &&
+        (
+          <ModalConfirm
+            title={isOpen ? "Deseja Fechar a Sala:" : "Deseja Abrir a Sala:"}
+            name={nome}
+            buttonYes={() => ButtonActiveMQTT()}
+            buttonNot={() => modal.value = false}
+          />
+        )}
+      {modalstatus.value === "loading" && <Loading />}
     </>
   );
 }

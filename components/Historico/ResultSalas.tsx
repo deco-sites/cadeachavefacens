@@ -41,8 +41,8 @@ export default function ResultSalas() {
         )
         : (
           <>
-            {salas.value !== null && salas.value?.length > 0
-              ? salas.value?.map((sala) => (
+            {salas.value !== null && salas.value.salas?.length > 0
+              ? salas.value.salas?.map((sala) => (
                 <CardSala
                   nome={sala.nome}
                   aberta={sala.aberta}

@@ -5,7 +5,7 @@
 
 import { signal } from "@preact/signals";
 import { Response } from "deco-sites/cadeachavefacens/loaders/Historic/ClassHistoric.ts";
-import { Sala } from "deco-sites/cadeachavefacens/actions/Salas/getListSalas.ts";
+import { Response as ResponseSala } from "deco-sites/cadeachavefacens/actions/Salas/getListSalas.ts";
 import { Professor } from "deco-sites/cadeachavefacens/actions/Professor/getListProfessores.ts";
 
 interface Filter {
@@ -16,6 +16,10 @@ interface Filter {
   dataFinal: string;
   totalElements?: number;
 }
+interface FilterSala {
+  nome?: string;
+  aberto?: boolean;
+}
 
 const displayCart = signal(false);
 const displayMenu = signal(false);
@@ -23,11 +27,12 @@ const displaySearchPopup = signal(false);
 const displaySearchDrawer = signal(false);
 const token = signal("");
 const historico = signal<Response | null>(null);
-const salas = signal<Sala[] | null>(null);
+const salas = signal<ResponseSala | null>(null);
 const professores = signal<Professor[] | null>(null);
 const loading = signal<boolean>(true);
 const role = signal<"user" | "admin" | "">("");
 const filter = signal<Filter | null>(null);
+const filterSala = signal<FilterSala | null>(null);
 
 const state = {
   displayCart,
@@ -41,6 +46,7 @@ const state = {
   loading,
   role,
   filter,
+  filterSala,
 };
 
 // Keyboard event listeners

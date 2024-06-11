@@ -17,12 +17,14 @@ export interface Sala {
 export default function FormResultSalas() {
   const inputAbriu = useRef<HTMLInputElement>(null);
   const inputFechado = useRef<HTMLInputElement>(null);
-  const abriu = useSignal<boolean>(false);
+  const abriu = useSignal<boolean | undefined>(undefined);
   const selectDivSalas = useSignal(false);
   const valueSalas = useSignal<Sala[] | null>(null);
   const valueSala = useSignal<Sala>({ nome: "" });
 
-  const { salas, loading } = useUI();
+  const refSalas = useRef<HTMLInputElement>(null);
+
+  const { salas, loading, filterSala } = useUI();
 
   async function getResponseSalas() {
     const cookies = getCookie("token");
@@ -69,15 +71,18 @@ export default function FormResultSalas() {
   async function ApplyFilter() {
     const cookies = getCookie("token");
 
-    loading.value = true;
-    const res = await invoke.site.actions.Salas.getListSalas({
-      token: cookies,
-      nome: valueSala.value.nome,
-      abriu: abriu.value,
-    });
-    loading.value = false;
+    if (abriu.value !== undefined || valueSala.value.nome !== "") {
+      loading.value = true;
+      const res = await invoke.site.actions.Salas.getListSalas({
+        token: cookies,
+        nome: valueSala.value.nome,
+        abriu: abriu.value,
+      });
+      loading.value = false;
+      filterSala.value = { nome: valueSala.value.nome, aberto: abriu.value };
 
-    salas.value = res;
+      salas.value = res;
+    }
   }
 
   async function exportTable() {
@@ -93,7 +98,7 @@ export default function FormResultSalas() {
     ];
 
     if (res) {
-      res.forEach((item) => {
+      res.salas.forEach((item) => {
         data.push([
           item.id.toString(),
           item.nome,
@@ -114,6 +119,23 @@ export default function FormResultSalas() {
     XLSX.writeFile(wb, "Salas.xlsx");
   }
 
+  async function ClearFilter() {
+    const cookies = getCookie("token");
+
+    refSalas.current!.value = "";
+    inputAbriu.current!.checked = false;
+    inputFechado.current!.checked = false;
+
+    loading.value = true;
+    const res = await invoke.site.actions.Salas.getListAllSalas({
+      token: cookies,
+    });
+    loading.value = false;
+    filterSala.value = { nome: valueSala.value.nome, aberto: abriu.value };
+
+    salas.value = res;
+  }
+
   return (
     <div class="flex flex-col gap-2 col-span-1">
       <h2 class="text-3xl font-semibold">Filtro de Salas:</h2>
@@ -126,6 +148,7 @@ export default function FormResultSalas() {
           class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
           value={valueSala.value.nome}
           onKeyUp={(e) => getOptions(e)}
+          ref={refSalas}
           onBlur={ExitInput}
         >
         </input>
@@ -198,7 +221,10 @@ export default function FormResultSalas() {
         >
           Aplicar Filtros <Icon id="Search" size={24} />
         </button>
-        <button class="flex justify-center items-center px-3 py-3 text-white bg-[#FFA800] rounded-lg w-2/4 text-xl gap-2">
+        <button
+          class="flex justify-center items-center px-3 py-3 text-white bg-[#FFA800] rounded-lg w-2/4 text-xl gap-2"
+          onClick={ClearFilter}
+        >
           Limpar
           <Icon id="Plus" size={24} class="rotate-45" />
         </button>

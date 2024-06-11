@@ -6,6 +6,7 @@ import { signal, useSignal, useSignalEffect } from "@preact/signals";
 import { ChangeEvent, useRef } from "preact/compat";
 import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
 import FlagStatus from "deco-sites/cadeachavefacens/components/Flags/FlagStatus.tsx";
+import { getCPFNumeros } from "deco-sites/cadeachavefacens/sdk/replaceCPF.ts";
 
 interface Sala {
   id?: number;
@@ -82,6 +83,8 @@ export default function CadastroProfessores(props: Props) {
   const confirmPassword = useSignal<boolean>(false);
 
   const isEdit = useSignal(false);
+
+  const modalStatus = useSignal<"loading" | null>(null);
 
   function ExitInput() {
     setTimeout(() => {
@@ -215,6 +218,8 @@ export default function CadastroProfessores(props: Props) {
       refConfirSenha.current?.value
     ) {
       const arrayIndex: number[] | null = [];
+      const cpf = getCPFNumeros(refCPF.current.value);
+      modalStatus.value = "loading";
 
       if (listClassPost.value && listClassPost.value?.length > 0) {
         listClassPost.value.map((index) => {
@@ -226,7 +231,7 @@ export default function CadastroProfessores(props: Props) {
 
       const professor: ProfessorPost = {
         nome: refName.current.value,
-        cpf: refCPF.current.value,
+        cpf: cpf,
         salas: arrayIndex || null,
         ativo: false,
       };
@@ -254,6 +259,10 @@ export default function CadastroProfessores(props: Props) {
         const resUser = await invoke.site.actions.User.postUsuario({
           token: cookies,
           user: user,
+        }).then((r) => {
+          return r;
+        }).finally(() => {
+          modalStatus.value = null;
         });
 
         if (resUser) {
@@ -272,6 +281,7 @@ export default function CadastroProfessores(props: Props) {
       isEdit.value && refCPF.current?.value && refName.current?.value &&
       refConfirSenha.current?.value
     ) {
+      const cpf = getCPFNumeros(refCPF.current?.value);
       const arrayIndex: number[] | null = [];
       if (listClassPost.value && listClassPost.value?.length > 0) {
         listClassPost.value.map((index) => {
@@ -283,10 +293,12 @@ export default function CadastroProfessores(props: Props) {
 
       const professorPut: ProfessorPost = {
         nome: refName.current.value,
-        cpf: refCPF.current.value,
+        cpf: cpf,
         salas: arrayIndex || null,
         ativo: false,
       };
+
+      modalStatus.value = "loading";
 
       const res = await invoke.site.actions.Professor.putProfessor({
         token: cookies,
@@ -307,6 +319,10 @@ export default function CadastroProfessores(props: Props) {
           token: cookies,
           user: user,
           id: professor.value?.id,
+        }).then((r) => {
+          return r;
+        }).finally(() => {
+          modalStatus.value = null;
         });
 
         if (resUser) {
@@ -452,7 +468,7 @@ export default function CadastroProfessores(props: Props) {
           <input
             type={confirmPassword.value ? "text" : "password"}
             ref={refConfirSenha}
-            class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
+            class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg"
           >
           </input>
           <button

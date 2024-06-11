@@ -5,11 +5,18 @@ export interface Sala {
   ativo: boolean;
 }
 
+export interface Response {
+  totalPage: number;
+  number: number;
+  totalElements?: number;
+  salas: Array<Sala>;
+}
+
 export interface Props {
   token: string;
 }
 
-const loader = async (props: Props): Promise<Sala[] | null> => {
+const loader = async (props: Props): Promise<Response | null> => {
   const url = `https://cadeachave-1715465469308.azurewebsites.net/api/sala`;
 
   const response = await fetch(url, {
@@ -24,6 +31,8 @@ const loader = async (props: Props): Promise<Sala[] | null> => {
     return null;
   }
 
+  console.log("response", response);
+
   const arraySala: Sala[] = [];
 
   response.content?.map((item: Sala) => {
@@ -35,7 +44,14 @@ const loader = async (props: Props): Promise<Sala[] | null> => {
     });
   });
 
-  return arraySala;
+  const data: Response = {
+    totalPage: response.totalPages,
+    number: response.number,
+    salas: arraySala,
+    totalElements: response.totalElements,
+  };
+
+  return data;
 };
 
 export default loader;

@@ -26,7 +26,7 @@ export default function ModalConfirm(
             onClick={buttonNot}
             class={"h-10 w-2/4 flex justify-center items-center rounded-lg text-xl text-white bg-[#FF0000] font-semibold"}
           >
-            NÂO
+            NÃO
           </button>
         </div>
       </div>

@@ -29,6 +29,10 @@ export default function FormHistorico() {
   const inputAbriu = useRef<HTMLInputElement>(null);
   const inputFechado = useRef<HTMLInputElement>(null);
   const abriu = useSignal<boolean | undefined>(undefined);
+
+  const refProfessor = useRef<HTMLInputElement>(null);
+  const refSalas = useRef<HTMLInputElement>(null);
+
   const { historico, loading, filter } = useUI();
 
   const date = new Date();
@@ -194,15 +198,26 @@ export default function FormHistorico() {
   }
 
   async function ClearFilter() {
+    loading.value = true;
     valueProfessor.value.nome = "";
     valueSala.value.nome = "";
     abriu.value = undefined;
     inputAbriu.current!.checked = false;
     inputFechado.current!.checked = false;
 
+    refProfessor.current!.value = "";
+    refSalas.current!.value = "";
+
+    initialDate.current!.value = beforeDateinput;
+    finalDate.current!.value = currentDateIput;
+
     const cookies = getCookie("token");
     const res = await invoke.site.loaders.Historic.ClassHistoric({
       token: cookies,
+    }).then((r) => {
+      return r;
+    }).finally(() => {
+      loading.value = false;
     });
 
     historico.value = res;
@@ -285,6 +300,7 @@ export default function FormHistorico() {
           type={"text"}
           class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
           value={valueProfessor.value.nome}
+          ref={refProfessor}
           onKeyUp={(e) => getOptions(e, "professor")}
           onBlur={ExitInput}
         >
@@ -310,6 +326,7 @@ export default function FormHistorico() {
         </label>
         <input
           type={"text"}
+          ref={refSalas}
           class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
           value={valueSala.value.nome}
           onKeyUp={(e) => getOptions(e, "cpf")}
@@ -385,7 +402,11 @@ export default function FormHistorico() {
         >
           Aplicar Filtros <Icon id="Search" size={24} />
         </button>
-        <button class="flex justify-center items-center px-3 py-3 text-white bg-[#FFA800] rounded-lg w-2/4 text-xl gap-2">
+        <button
+          class="flex justify-center items-center px-3 py-3 text-white bg-[#FFA800] rounded-lg w-2/4 text-xl gap-2"
+          onClick={ClearFilter}
+          type="button"
+        >
           Limpar
           <Icon id="Plus" size={24} class="rotate-45" />
         </button>

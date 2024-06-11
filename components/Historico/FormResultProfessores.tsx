@@ -17,22 +17,26 @@ export default function FormResultProfessores() {
   const valueProfessor = useSignal<ProfessorCPFOrName>({ nome: "", cpf: "" });
   const valueProfessores = useSignal<ProfessorCPFOrName[] | null>(null);
   const selectDivName = useSignal(false);
+
+  const refProfessor = useRef<HTMLInputElement>(null);
   const { professores, loading } = useUI();
 
   async function ApplyFilter() {
     const cookies = getCookie("token");
-    loading.value = true;
 
-    const res = await invoke.site.actions.Professor.getListProfessores({
-      token: cookies,
-      termo: valueProfessor.value.nome,
-    }).then((r) => {
-      return r;
-    }).finally(() => {
-      loading.value = false;
-    });
+    if (refProfessor.current && refProfessor.current.value !== "") {
+      loading.value = true;
+      const res = await invoke.site.actions.Professor.getListProfessores({
+        token: cookies,
+        termo: valueProfessor.value.nome,
+      }).then((r) => {
+        return r;
+      }).finally(() => {
+        loading.value = false;
+      });
 
-    professores.value = res;
+      professores.value = res;
+    }
   }
 
   async function getResponseProfessores() {
@@ -79,10 +83,16 @@ export default function FormResultProfessores() {
 
   async function ClearFilter() {
     valueProfessor.value.nome = "";
+    refProfessor.current!.value = "";
 
+    loading.value = true;
     const cookies = getCookie("token");
     const res = await invoke.site.actions.Professor["getListAllProfessores,"]({
       token: cookies,
+    }).then((r) => {
+      return r;
+    }).finally(() => {
+      loading.value = false;
     });
 
     professores.value = res;
@@ -134,6 +144,7 @@ export default function FormResultProfessores() {
           value={valueProfessor.value.nome}
           onKeyUp={(e) => getOptions(e, "professor")}
           onBlur={ExitInput}
+          ref={refProfessor}
         >
         </input>
         {selectDivName.value && (

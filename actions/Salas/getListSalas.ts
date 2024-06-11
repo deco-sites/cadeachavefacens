@@ -5,15 +5,23 @@ export interface Sala {
   ativo: boolean;
 }
 
+export interface Response {
+  totalPage: number;
+  number: number;
+  totalElements?: number;
+  salas: Array<Sala>;
+}
+
 export interface Props {
   token: string;
   nome: string;
-  abriu: boolean;
+  abriu?: boolean;
   ativo: boolean;
+  size?: number;
 }
 
-const loader = async (props: Props): Promise<Sala[] | null> => {
-  const { nome, abriu, ativo } = props;
+const loader = async (props: Props): Promise<Response | null> => {
+  const { nome, abriu, ativo, size } = props;
 
   const arrayCot: string[] = [];
 
@@ -31,6 +39,9 @@ const loader = async (props: Props): Promise<Sala[] | null> => {
   }
   if (ativo == false) {
     arrayCot.push(`ativo=${ativo}`);
+  }
+  if (size) {
+    arrayCot.push(`size=${size}`);
   }
 
   let stringUrl = "";
@@ -67,7 +78,14 @@ const loader = async (props: Props): Promise<Sala[] | null> => {
     });
   });
 
-  return arraySala;
+  const data: Response = {
+    totalPage: response.totalPages,
+    number: response.number,
+    salas: arraySala,
+    totalElements: response.totalElements,
+  };
+
+  return data;
 };
 
 export default loader;
