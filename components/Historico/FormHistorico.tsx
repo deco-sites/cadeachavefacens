@@ -33,7 +33,7 @@ export default function FormHistorico() {
   const refProfessor = useRef<HTMLInputElement>(null);
   const refSalas = useRef<HTMLInputElement>(null);
 
-  const { historico, loading, filter } = useUI();
+  const { historico, loading, filter, role } = useUI();
 
   const date = new Date();
 
@@ -411,13 +411,15 @@ export default function FormHistorico() {
           <Icon id="Plus" size={24} class="rotate-45" />
         </button>
       </div>
-      <button
-        type="button"
-        onClick={() => exportTable()}
-        class="flex justify-center items-center px-3 py-3 text-white bg-[#185C37] rounded-lg w-full text-xl"
-      >
-        Gerar Excel
-      </button>
+      {role.value === "admin" && (
+        <button
+          type="button"
+          onClick={() => exportTable()}
+          class="flex justify-center items-center px-3 py-3 text-white bg-[#185C37] rounded-lg w-full text-xl"
+        >
+          Gerar Excel
+        </button>
+      )}
     </form>
   );
 }

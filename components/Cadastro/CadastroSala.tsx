@@ -63,8 +63,8 @@ export default function CadastroSala(props: Props) {
         token: cookies,
         nome: sala,
       }).then((r) => {
-        console.log("return", r)
-        return r
+        console.log("return", r);
+        return r;
       }).finally(() => {
         loading.value = null;
       });
@@ -73,11 +73,9 @@ export default function CadastroSala(props: Props) {
         if (res === 200) {
           status.value = true;
           toast.value = true;
-        }
-        else if (res === 409) {
+        } else if (res === 409) {
           message.value = "Falha. Sala ja existe";
-        }
-        else {
+        } else {
           status.value = false;
         }
         toast.value = true;
@@ -101,7 +99,7 @@ export default function CadastroSala(props: Props) {
           show={toast.value}
           status={status.value}
           successLabel="Sala(s) criada(s) com Sucesso"
-          errorLabel={message.value }
+          errorLabel={message.value}
         />
         <div class="rounded-2xl border shadow-xl p-2 gap-4 flex flex-col lg:min-w-[440px]">
           <h1 class="uppercase text-4xl text-center">{props.title}</h1>
