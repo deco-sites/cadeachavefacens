@@ -7,6 +7,7 @@ import { ChangeEvent, useRef } from "preact/compat";
 import { getCookie } from "deco-sites/cadeachavefacens/sdk/useCookies.ts";
 import FlagStatus from "deco-sites/cadeachavefacens/components/Flags/FlagStatus.tsx";
 import { getCPFNumeros } from "deco-sites/cadeachavefacens/sdk/replaceCPF.ts";
+import Loading from "deco-sites/cadeachavefacens/components/Modal/Loading.tsx";
 
 interface Sala {
   id?: number;
@@ -50,7 +51,7 @@ export interface User {
 
 interface UserPost {
   login: string;
-  password?: string;
+  password: string | null;
   role: string;
   ativo?: boolean;
   professor_id: number;
@@ -201,12 +202,14 @@ export default function CadastroProfessores(props: Props) {
     } else {
       validateCPF.value = false;
     }
-    if (!refSenha.current?.value) {
+    if (!refSenha.current?.value && !isEdit.value) {
       validateSenha.value = true;
     } else {
       validateSenha.value = false;
     }
-    if (refConfirSenha.current?.value != refSenha.current?.value) {
+    if (
+      !isEdit.value && refConfirSenha.current?.value != refSenha.current?.value
+    ) {
       validateConfirmSenha.value = true;
     } else {
       validateConfirmSenha.value = false;
@@ -219,6 +222,7 @@ export default function CadastroProfessores(props: Props) {
     ) {
       const arrayIndex: number[] | null = [];
       const cpf = getCPFNumeros(refCPF.current.value);
+
       modalStatus.value = "loading";
 
       if (listClassPost.value && listClassPost.value?.length > 0) {
@@ -278,9 +282,9 @@ export default function CadastroProfessores(props: Props) {
         }, 2000);
       }
     } else if (
-      isEdit.value && refCPF.current?.value && refName.current?.value &&
-      refConfirSenha.current?.value
+      isEdit.value && refCPF.current?.value && refName.current?.value
     ) {
+      modalStatus.value = "loading";
       const cpf = getCPFNumeros(refCPF.current?.value);
       const arrayIndex: number[] | null = [];
       if (listClassPost.value && listClassPost.value?.length > 0) {
@@ -304,12 +308,17 @@ export default function CadastroProfessores(props: Props) {
         token: cookies,
         professor: professorPut,
         id: professor.value?.professor.id,
+      }).then((r) => {
+        return r;
+      }).finally(() => {
+        modalStatus.value = null;
       });
 
       if (res) {
+        modalStatus.value = "loading";
         const user: UserPost = {
           login: professorPut.cpf,
-          password: refConfirSenha.current.value,
+          password: refConfirSenha.current?.value || null,
           role: refUSER.current?.checked && "USER" || "ADMIN",
           professor_id: res.id || professor.value?.professor_id || 0,
           ativo: true,
@@ -335,6 +344,11 @@ export default function CadastroProfessores(props: Props) {
 
         setTimeout(() => {
           toast.value = false;
+          if (status.value) {
+            setTimeout(() => {
+              window.location.href = "/historico-professores";
+            }, 500);
+          }
         }, 2000);
       }
     }
@@ -396,180 +410,185 @@ export default function CadastroProfessores(props: Props) {
   });
 
   return (
-    <div class="w-full h-full flex justify-center pt-6 pb-6 overflow-x-hidden relative">
-      <FlagStatus
-        show={toast.value}
-        status={status.value}
-        successLabel="Professor Editada com Sucesso"
-        errorLabel="Falha. Tente novamente mais tarde"
-      />
-      <div class="rounded-2xl border shadow-xl p-2 gap-2 flex flex-col lg:min-w-[440px]">
-        <h1 class="uppercase text-4xl text-center mb-3">{props.title}</h1>
-        <span class="text-sm">
-          {props.inputName}
-        </span>
-        <input
-          type={"text"}
-          value={professor.value?.professor.nome}
-          ref={refName}
-          class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
-        >
-        </input>
-        {validateName.value && (
-          <span class="text-xs text-red-600">
-            Preencha o campo corretamente*
+    <>
+      <div class="w-full h-full flex justify-center pt-6 pb-6 overflow-x-hidden relative">
+        <FlagStatus
+          show={toast.value}
+          status={status.value}
+          successLabel="Professor Editada com Sucesso"
+          errorLabel="Falha. Tente novamente mais tarde"
+        />
+        <div class="rounded-2xl border shadow-xl p-2 gap-2 flex flex-col lg:min-w-[440px]">
+          <h1 class="uppercase text-4xl text-center mb-3">{props.title}</h1>
+          <span class="text-sm">
+            {props.inputName}
           </span>
-        )}
-        <span class="text-sm">
-          {props.inputCPF}
-        </span>
-        <input
-          type={"text"}
-          value={professor.value?.professor.cpf}
-          ref={refCPF}
-          onInput={formatCPF}
-          onChange={verifyCPF}
-          class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
-        >
-        </input>
-        {validateCPF.value && (
-          <span class="text-xs text-red-600">
-            Preencha o campo com um cpf valido*
-          </span>
-        )}
-        <span class="text-sm">
-          {props.inputPassword}
-        </span>
-        <div class="flex flex-row gap-2 bg-[#EAEAEA] rounded-lg px-2">
-          <input
-            type={visiblePassword.value ? "text" : "password"}
-            ref={refSenha}
-            class="outline-none bg-[#EAEAEA] h-10 w-full"
-          >
-          </input>
-          <button
-            onClick={() => visiblePassword.value = !visiblePassword.value}
-            class="h-full w-7 flex justify-center items-center"
-          >
-            {!visiblePassword.value
-              ? <Icon id="Eye" size={24} />
-              : <Icon id="EyeOff" size={24} />}
-          </button>
-        </div>
-        {validateSenha.value && (
-          <span class="text-xs text-red-600">
-            Preencha o campo corretamente*
-          </span>
-        )}
-        <span class="text-sm">
-          {props.inputConfirmePassword}
-        </span>
-        <div class="flex flex-row gap-2 bg-[#EAEAEA] rounded-lg px-2">
-          <input
-            type={confirmPassword.value ? "text" : "password"}
-            ref={refConfirSenha}
-            class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg"
-          >
-          </input>
-          <button
-            onClick={() => confirmPassword.value = !confirmPassword.value}
-            class="h-full w-7 flex justify-center items-center"
-          >
-            {!confirmPassword.value
-              ? <Icon id="Eye" size={24} />
-              : <Icon id="EyeOff" size={24} />}
-          </button>
-        </div>
-        {validateConfirmSenha.value && (
-          <span class="text-xs text-red-600">As senhas estão incorretas*</span>
-        )}
-        <span>Tipo do usuario:</span>
-        <div class="flex flex-row gap-2">
-          <input
-            type="radio"
-            required
-            ref={refADMIN}
-            id="ADMIN"
-            name="ROLE"
-            value="ADMIN"
-          />
-          <label for="ADMIN">ADMIN</label>
-          <input
-            type="radio"
-            required
-            ref={refUSER}
-            id="USER"
-            name="ROLE"
-            value="USER"
-            checked
-          />
-          <label for="USER">USER</label>
-        </div>
-        <span class="text-sm">
-          {props.inputClass}
-        </span>
-        <div class="flex flex-row h-10 w-full rounded-lg bg-[#EAEAEA] relative">
           <input
             type={"text"}
+            value={professor.value?.professor.nome}
+            ref={refName}
             class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
-            value={valueSala.value.nome}
-            onKeyUp={(e) => getOptions(e)}
-            onBlur={ExitInput}
           >
           </input>
-          <button class="min-w-10 bg-green-500 w-10 h-10 flex justify-center items-center rounded-lg text-white">
-            <Icon
-              id="Plus"
-              size={24}
-              onClick={() => addClass(valueSala.value)}
-            />
-          </button>
-          {selectDivSalas.value && (
-            <div class="absolute top-full rounded-lg bg-white flex flex-col gap-2 z-10 w-full items-start max-h-28 overflow-y-scroll">
-              {listSalas.value?.map((item) => (
-                <button
-                  class="w-full h-auto px-2 py-1 hover:bg-[#1f70b8] hover:text-white text-start"
-                  type={"button"}
-                  onClick={() => addClass(item)}
-                >
-                  {item.nome}
-                </button>
-              ))}
-            </div>
+          {validateName.value && (
+            <span class="text-xs text-red-600">
+              Preencha o campo corretamente*
+            </span>
           )}
-        </div>
-        <div class="flex flex-row gap-2">
-          {isEdit
-            ? (
-              <>
-                {listClassPost.value?.map((sala) => (
-                  <FlagSala
-                    label={sala.nome}
-                    id={sala.id}
-                    action={() => removeFlag(sala)}
-                  />
+          <span class="text-sm">
+            {props.inputCPF}
+          </span>
+          <input
+            type={"text"}
+            value={professor.value?.professor.cpf}
+            ref={refCPF}
+            onInput={formatCPF}
+            onChange={verifyCPF}
+            class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
+          >
+          </input>
+          {validateCPF.value && (
+            <span class="text-xs text-red-600">
+              Preencha o campo com um cpf valido*
+            </span>
+          )}
+          <span class="text-sm">
+            {props.inputPassword}
+          </span>
+          <div class="flex flex-row gap-2 bg-[#EAEAEA] rounded-lg px-2">
+            <input
+              type={visiblePassword.value ? "text" : "password"}
+              ref={refSenha}
+              class="outline-none bg-[#EAEAEA] h-10 w-full"
+            >
+            </input>
+            <button
+              onClick={() => visiblePassword.value = !visiblePassword.value}
+              class="h-full w-7 flex justify-center items-center"
+            >
+              {!visiblePassword.value
+                ? <Icon id="Eye" size={24} />
+                : <Icon id="EyeOff" size={24} />}
+            </button>
+          </div>
+          {validateSenha.value && (
+            <span class="text-xs text-red-600">
+              Preencha o campo corretamente*
+            </span>
+          )}
+          <span class="text-sm">
+            {props.inputConfirmePassword}
+          </span>
+          <div class="flex flex-row gap-2 bg-[#EAEAEA] rounded-lg px-2">
+            <input
+              type={confirmPassword.value ? "text" : "password"}
+              ref={refConfirSenha}
+              class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg"
+            >
+            </input>
+            <button
+              onClick={() => confirmPassword.value = !confirmPassword.value}
+              class="h-full w-7 flex justify-center items-center"
+            >
+              {!confirmPassword.value
+                ? <Icon id="Eye" size={24} />
+                : <Icon id="EyeOff" size={24} />}
+            </button>
+          </div>
+          {validateConfirmSenha.value && (
+            <span class="text-xs text-red-600">
+              As senhas estão incorretas*
+            </span>
+          )}
+          <span>Tipo do usuario:</span>
+          <div class="flex flex-row gap-2">
+            <input
+              type="radio"
+              required
+              ref={refADMIN}
+              id="ADMIN"
+              name="ROLE"
+              value="ADMIN"
+            />
+            <label for="ADMIN">ADMIN</label>
+            <input
+              type="radio"
+              required
+              ref={refUSER}
+              id="USER"
+              name="ROLE"
+              value="USER"
+              checked
+            />
+            <label for="USER">USER</label>
+          </div>
+          <span class="text-sm">
+            {props.inputClass}
+          </span>
+          <div class="flex flex-row h-10 w-full rounded-lg bg-[#EAEAEA] relative">
+            <input
+              type={"text"}
+              class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
+              value={valueSala.value.nome}
+              onKeyUp={(e) => getOptions(e)}
+              onBlur={ExitInput}
+            >
+            </input>
+            <button class="min-w-10 bg-green-500 w-10 h-10 flex justify-center items-center rounded-lg text-white">
+              <Icon
+                id="Plus"
+                size={24}
+                onClick={() => addClass(valueSala.value)}
+              />
+            </button>
+            {selectDivSalas.value && (
+              <div class="absolute top-full rounded-lg bg-white flex flex-col gap-2 z-10 w-full items-start max-h-28 overflow-y-scroll">
+                {listSalas.value?.map((item) => (
+                  <button
+                    class="w-full h-auto px-2 py-1 hover:bg-[#1f70b8] hover:text-white text-start"
+                    type={"button"}
+                    onClick={() => addClass(item)}
+                  >
+                    {item.nome}
+                  </button>
                 ))}
-              </>
-            )
-            : (
-              <>
-                {listClassPost.value?.map((sala) => (
-                  <FlagSala
-                    label={sala.nome}
-                    id={sala.id}
-                    action={() => removeFlag(sala)}
-                  />
-                ))}
-              </>
+              </div>
             )}
+          </div>
+          <div class="flex flex-row gap-2">
+            {isEdit
+              ? (
+                <>
+                  {listClassPost.value?.map((sala) => (
+                    <FlagSala
+                      label={sala.nome}
+                      id={sala.id}
+                      action={() => removeFlag(sala)}
+                    />
+                  ))}
+                </>
+              )
+              : (
+                <>
+                  {listClassPost.value?.map((sala) => (
+                    <FlagSala
+                      label={sala.nome}
+                      id={sala.id}
+                      action={() => removeFlag(sala)}
+                    />
+                  ))}
+                </>
+              )}
+          </div>
+          <ButtonCustom
+            label={isEdit.value ? "Salvar alterações" : "Cadastrar"}
+            background="#66F5A7"
+            colorText="white"
+            action={() => createProf()}
+          />
         </div>
-        <ButtonCustom
-          label={isEdit.value ? "Salvar alterações" : "Cadastrar"}
-          background="#66F5A7"
-          colorText="white"
-          action={() => createProf()}
-        />
       </div>
-    </div>
+      {modalStatus.value == "loading" && <Loading />}
+    </>
   );
 }

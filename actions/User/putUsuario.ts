@@ -1,6 +1,6 @@
 interface User {
   login: string;
-  password?: string;
+  password?: string | null;
   role: string;
   ativo?: boolean;
   professor_id: number;
