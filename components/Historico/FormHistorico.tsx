@@ -411,7 +411,7 @@ export default function FormHistorico() {
           <Icon id="Plus" size={24} class="rotate-45" />
         </button>
       </div>
-      {role.value === "admin" && (
+      {role.value !== "user" && (
         <button
           type="button"
           onClick={() => exportTable()}

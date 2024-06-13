@@ -369,40 +369,58 @@ export default function CadastroProfessores(props: Props) {
   }
 
   function verifyCPF() {
-    const value = refCPF.current?.value;
-    if (value && refCPF.current) {
-      const cpf = value.replace(/[^\d]+/g, "");
+    const cpf = refCPF.current?.value;
+    const cpfStr = cpf?.replace(/[^\d]+/g, "");
 
-      if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
-        validateCPF.value = true;
-      }
+    if (cpfStr === "") return false;
 
-      let soma = 0;
-      let resto;
+    if (cpfStr?.length !== 11) {
+      return false;
+    }
 
-      // Valida o primeiro dígito verificador
-      for (let i = 1; i <= 9; i++) {
-        soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
-      }
-      resto = (soma * 10) % 11;
-      if (resto === 10 || resto === 11) resto = 0;
-      if (resto !== parseInt(cpf.substring(9, 10))) {
-        validateCPF.value = true;
-      }
+    if (
+      cpfStr === "00000000000" ||
+      cpfStr === "11111111111" ||
+      cpfStr === "22222222222" ||
+      cpfStr === "33333333333" ||
+      cpfStr === "44444444444" ||
+      cpfStr === "55555555555" ||
+      cpfStr === "66666666666" ||
+      cpfStr === "77777777777" ||
+      cpfStr === "88888888888" ||
+      cpfStr === "99999999999"
+    ) {
+      return false;
+    }
 
-      soma = 0;
+    let soma: number;
+    let resto: number;
 
-      // Valida o segundo dígito verificador
-      for (let i = 1; i <= 10; i++) {
-        soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
-      }
-      resto = (soma * 10) % 11;
-      if (resto === 10 || resto === 11) resto = 0;
-      if (resto !== parseInt(cpf.substring(10, 11))) {
-        validateCPF.value = true;
-      } else {
-        validateCPF.value = false;
-      }
+    soma = 0;
+
+    for (let i = 1; i <= 9; i++) {
+      soma += parseInt(cpfStr.substring(i - 1, i)) * (11 - i);
+    }
+
+    resto = (soma * 10) % 11;
+
+    if ((resto == 10) || (resto == 11)) resto = 0;
+
+    if (resto != parseInt(cpfStr.substring(9, 10))) validateCPF.value = true;
+
+    soma = 0;
+
+    for (let i = 1; i <= 10; i++) {
+      soma += parseInt(cpfStr.substring(i - 1, i)) * (12 - i);
+    }
+
+    resto = (soma * 10) % 11;
+
+    if ((resto == 10) || (resto == 11)) resto = 0;
+
+    if (resto != parseInt(cpfStr.substring(10, 11))) validateCPF.value = true;
+    else {
+      validateCPF.value = false;
     }
   }
   useSignalEffect(() => {
@@ -497,7 +515,7 @@ export default function CadastroProfessores(props: Props) {
           </div>
           {validateConfirmSenha.value && (
             <span class="text-xs text-red-600">
-              As senhas estão incorretas*
+              As senhas não são iguais*
             </span>
           )}
           <span>Tipo do usuario:</span>
