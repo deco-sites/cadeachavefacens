@@ -1,4 +1,3 @@
-import { Client } from "https://deno.land/x/mqtt@0.1.2/deno/mod.ts";
 import { useSignal } from "@preact/signals";
 import ModalConfirm from "deco-sites/cadeachavefacens/components/Modal/ModalConfirm.tsx";
 import Loading from "deco-sites/cadeachavefacens/components/Modal/Loading.tsx";
@@ -12,31 +11,43 @@ export default function ButtonMQTT({ isOpen, nome }: Props) {
   const modal = useSignal<boolean>(false);
   const modalstatus = useSignal<"loading" | null>(null);
 
+  // deno-lint-ignore no-explicit-any
+  function loadScript(url: string, callback: any) {
+    const script = document.createElement("script");
+    script.src = url;
+    script.onload = callback;
+    document.head.appendChild(script);
+  }
+
   function ButtonActiveMQTT() {
-    modal.value = false;
-    // modalstatus.value = "loading"
-    // Configurações do broker MQTT
-    const mqtt_broker = "wss://test.mosquitto.org:8081"; // Websocket para comunicação segura
-    const topic = `CADEACHAVE/SALA/${nome}`;
+    const mqttScriptUrl =
+      "https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.2.7/mqtt.min.js";
 
-    // Cria um cliente MQTT
-    const client = new Client({ url: mqtt_broker });
+    loadScript(mqttScriptUrl, function () {
+      // Configurações do broker MQTT
+      const mqtt_broker = "wss://test.mosquitto.org:8081"; // Websocket para comunicação segura
+      const topic = `CADEACHAVE/SALA/${nome}`;
 
-    // Callback chamado quando o cliente se conecta ao broker
-    client.on("connect", function () {
-      console.log("Conectado ao broker MQTT");
-      // Publica a mensagem no tópico MQTT
-      client.publish(topic, "1");
-      // Desconecta do broker após enviar a mensagem
-      client.disconnect();
-      // modalstatus.value = null
+      // Cria um cliente MQTT
+      const client = mqtt.connect(mqtt_broker);
+
+      // Callback chamado quando o cliente se conecta ao broker
+      client.on("connect", function () {
+        console.log("Conectado ao broker MQTT");
+        // Publica a mensagem no tópico MQTT
+        client.publish(topic, "1");
+        // Desconecta do broker após enviar a mensagem
+        client.end();
+      });
+
+      // Callback chamado quando ocorre um erro de conexão
+      // deno-lint-ignore no-explicit-any
+      client.on("error", function (error: any) {
+        console.error("Erro de conexão:", error);
+      });
     });
 
-    // Callback chamado quando ocorre um erro de conexão
-    // deno-lint-ignore no-explicit-any
-    client.on("error", function (error: any) {
-      console.error("Erro de conexão:", error);
-    });
+    modalstatus.value = null;
   }
 
   return (

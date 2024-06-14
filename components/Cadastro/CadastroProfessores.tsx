@@ -548,17 +548,10 @@ export default function CadastroProfessores(props: Props) {
               type={"text"}
               class="outline-none bg-[#EAEAEA] h-10 w-full rounded-lg px-2"
               value={valueSala.value.nome}
-              onKeyUp={(e) => getOptions(e)}
+              onInput={(e) => getOptions(e)}
               onBlur={ExitInput}
             >
             </input>
-            <button class="min-w-10 bg-green-500 w-10 h-10 flex justify-center items-center rounded-lg text-white">
-              <Icon
-                id="Plus"
-                size={24}
-                onClick={() => addClass(valueSala.value)}
-              />
-            </button>
             {selectDivSalas.value && (
               <div class="absolute top-full rounded-lg bg-white flex flex-col gap-2 z-10 w-full items-start max-h-28 overflow-y-scroll">
                 {listSalas.value?.map((item) => (
