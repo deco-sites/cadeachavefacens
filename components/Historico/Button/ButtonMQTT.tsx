@@ -22,6 +22,8 @@ export default function ButtonMQTT({ isOpen, nome }: Props) {
   function ButtonActiveMQTT() {
     const mqttScriptUrl =
       "https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.2.7/mqtt.min.js";
+      
+      modal.value = false
 
     loadScript(mqttScriptUrl, function () {
       // Configurações do broker MQTT
@@ -46,8 +48,6 @@ export default function ButtonMQTT({ isOpen, nome }: Props) {
         console.error("Erro de conexão:", error);
       });
     });
-
-    modalstatus.value = null;
   }
 
   return (
